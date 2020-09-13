@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
 					showLogo(),
 					showEmailInput(),
 					showPasswordInput(),
-					showEstablishmentInput(),
+					showPronoteURL(),
 					showPrimaryButton(),
 					showErrorMessage(),
 				],
@@ -211,24 +211,22 @@ class _LoginPageState extends State<LoginPage> {
 		);
 	}
 
-	Widget showEstablishmentInput() {
+	Widget showPronoteURL() {
 		return Padding(
 			padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-			child: new DropdownButtonFormField<int>(
-				value: _establishment,
-				items: [1, 2, 3, 4, 5]
-						.map((label) => DropdownMenuItem(
-								child: Text(label.toString()),
-								value: label,
-						))
-						.toList(),
-					hint: Text('Rating'),
-					onChanged: (value) {
-						setState(() {
-							_establishment = value;
-						});
-					},
-			)
+			child: new TextFormField(
+				maxLines: 1,
+				obscureText: true,
+				autofocus: false,
+				decoration: new InputDecoration(
+						hintText: 'URL Pronote',
+						icon: new Icon(
+							Icons.http,
+							color: Colors.grey,
+						)),
+				validator: (value) => value.isEmpty ? 'L\'URL Pronote ne peut pas être vide' : null,
+				onSaved: (value) => _password = value.trim(),
+			),
 		);
 	}
 
