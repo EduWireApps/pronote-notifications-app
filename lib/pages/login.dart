@@ -11,11 +11,12 @@ class LoginPage extends StatefulWidget {
 	State<StatefulWidget> createState() => new _LoginPageState();
 }
 
-	class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
 	final _formKey = new GlobalKey<FormState>();
 
 	String _email;
 	String _password;
+	String _establishment;
 	String _errorMessage;
 
 	bool _isLoading;
@@ -56,6 +57,10 @@ class LoginPage extends StatefulWidget {
 					_formKey.currentState.reset();
 				});
 			}
+		} else {
+			setState(() {
+				_isLoading = false;
+			});
 		}
 	}
 
@@ -75,7 +80,7 @@ class LoginPage extends StatefulWidget {
 	Widget build(BuildContext context) {
 		return new Scaffold(
 			appBar: new AppBar(
-				title: new Text('Flutter login demo'),
+				title: new Text('Pronote Notifications'),
 			),
 			body: Stack(
 				children: <Widget>[
@@ -129,6 +134,7 @@ class LoginPage extends StatefulWidget {
 					showLogo(),
 					showEmailInput(),
 					showPasswordInput(),
+					showEstablishmentInput(),
 					showPrimaryButton(),
 					showErrorMessage(),
 				],
@@ -175,9 +181,9 @@ class LoginPage extends StatefulWidget {
 				keyboardType: TextInputType.emailAddress,
 				autofocus: false,
 				decoration: new InputDecoration(
-					hintText: 'Email',
+					hintText: 'Nom d\'utilisateur',
 					icon: new Icon(
-					Icons.mail,
+					Icons.account_circle,
 					color: Colors.grey,
 					)),
 				validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
@@ -194,7 +200,7 @@ class LoginPage extends StatefulWidget {
 				obscureText: true,
 				autofocus: false,
 				decoration: new InputDecoration(
-					hintText: 'Password',
+					hintText: 'Mot de passe',
 					icon: new Icon(
 					Icons.lock,
 					color: Colors.grey,
@@ -202,6 +208,26 @@ class LoginPage extends StatefulWidget {
 				validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
 				onSaved: (value) => _password = value.trim(),
 			),
+		);
+	}
+
+	Widget showEstablishmentInput() {
+		return Padding(
+			padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+			child: new  DropdownButtonFormField(
+				autofocus: false,
+				decoration: new InputDecoration(
+						hintText: 'Établissement',
+						icon: new Icon(
+							Icons.school,
+							color: Colors.grey,
+						)),
+				validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+				onSaved: (value) => _password = value.trim(),
+				items: <DropdownMenuItem>[
+
+				]
+			)
 		);
 	}
 
@@ -214,8 +240,8 @@ class LoginPage extends StatefulWidget {
 				elevation: 5.0,
 				shape: new RoundedRectangleBorder(
 					borderRadius: new BorderRadius.circular(30.0)),
-				color: Colors.blue,
-				child: new Text('Login',
+				color: Color(0xff29826c),
+				child: new Text('Connexion',
 					style: new TextStyle(fontSize: 20.0, color: Colors.white)),
 				onPressed: validateAndSubmit,
 			),

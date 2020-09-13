@@ -26,6 +26,7 @@ dependencies:
   english_words: ^3.1.5
   http: ^0.12.2
   shared_preferences: ^0.4.2
+  geolocator: ^6.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -36,7 +36,7 @@ class Auth implements BaseAuth {
 
     Future<String> signIn(String username, String password, String pronoteURL) async {
         final response = await http.post(
-            'https://fba7e5a843b2.ngrok.io',
+            'https://fba7e5a843b2.ngrok.io/',
             headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8',
             },
