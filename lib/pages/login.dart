@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:validate/validate.dart';
 import 'package:pronote_notifications/services/authentication.dart';
 
 class LoginPage extends StatefulWidget {
