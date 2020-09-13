@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
 
 	String _email;
 	String _password;
-	String _establishment;
+	int _establishment;
 	String _errorMessage;
 
 	bool _isLoading;
@@ -186,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
 					Icons.account_circle,
 					color: Colors.grey,
 					)),
-				validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
+				validator: (value) => value.isEmpty ? 'Le nom d\'utilisateur ne peut pas être vide' : null,
 				onSaved: (value) => _email = value.trim(),
 			),
 		);
@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
 					Icons.lock,
 					color: Colors.grey,
 					)),
-				validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+				validator: (value) => value.isEmpty ? 'Le mot de passe ne peut pas être vide' : null,
 				onSaved: (value) => _password = value.trim(),
 			),
 		);
@@ -214,19 +214,20 @@ class _LoginPageState extends State<LoginPage> {
 	Widget showEstablishmentInput() {
 		return Padding(
 			padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-			child: new  DropdownButtonFormField(
-				autofocus: false,
-				decoration: new InputDecoration(
-						hintText: 'Établissement',
-						icon: new Icon(
-							Icons.school,
-							color: Colors.grey,
-						)),
-				validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
-				onSaved: (value) => _password = value.trim(),
-				items: <DropdownMenuItem>[
-
-				]
+			child: new DropdownButtonFormField<int>(
+				value: _establishment,
+				items: [1, 2, 3, 4, 5]
+						.map((label) => DropdownMenuItem(
+								child: Text(label.toString()),
+								value: label,
+						))
+						.toList(),
+					hint: Text('Rating'),
+					onChanged: (value) {
+						setState(() {
+							_establishment = value;
+						});
+					},
 			)
 		);
 	}
