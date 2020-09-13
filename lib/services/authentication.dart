@@ -47,7 +47,11 @@ class Auth implements BaseAuth {
             }),
         );
         final jsonData = json.decode(response.body);
-        return jsonData['name'];
+        if (!jsonData['success']) {
+            throw (jsonData['message']);
+        } else {
+            return jsonData['name'];
+        }
     }
 
 }

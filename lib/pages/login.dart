@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:validate/validate.dart';
 import 'package:pronote_notifications/services/authentication.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,9 +15,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 	final _formKey = new GlobalKey<FormState>();
 
-	String _email;
+	String _username;
 	String _password;
-	int _establishment;
+	String _pronoteURL;
 	String _errorMessage;
 
 	bool _isLoading;
@@ -40,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
 		if (validateAndSave()) {
 			String userId = "";
 			try {
-				userId = await widget.auth.signIn('test', 's', 'ok');
+				userId = await widget.auth.signIn(_username, _password, _pronoteURL);
 				print('Signed in: $userId');
 				setState(() {
 					_isLoading = false;
@@ -53,8 +54,8 @@ class _LoginPageState extends State<LoginPage> {
 				print('Error: $e');
 				setState(() {
 					_isLoading = false;
-					_errorMessage = e.message;
-					_formKey.currentState.reset();
+					_errorMessage = e;
+					_showDialog();
 				});
 			}
 		} else {
@@ -100,6 +101,30 @@ class _LoginPageState extends State<LoginPage> {
 		);
 	}
 
+	void _showDialog() {
+		// flutter defined function
+		showDialog(
+			context: context,
+			builder: (BuildContext context) {
+				// return object of type Dialog
+				return AlertDialog(
+					title: new Text("Une erreur est survenue"),
+					content: new Text(_errorMessage),
+					actions: <Widget>[
+						// usually buttons at the bottom of the dialog
+						new FlatButton(
+							child: new Text("Fermer"),
+							onPressed: () {
+								Navigator.of(context).pop();
+							},
+						),
+					],
+				);
+			},
+		);
+	}
+
+
 //  void _showVerifyEmailSentDialog() {
 //    showDialog(
 //      context: context,
@@ -136,28 +161,10 @@ class _LoginPageState extends State<LoginPage> {
 					showPasswordInput(),
 					showPronoteURL(),
 					showPrimaryButton(),
-					showErrorMessage(),
 				],
 			),
 		));
   }
-
-	Widget showErrorMessage() {
-		if (_errorMessage.length > 0 && _errorMessage != null) {
-			return new Text(
-				_errorMessage,
-				style: TextStyle(
-					fontSize: 13.0,
-					color: Colors.red,
-					height: 1.0,
-					fontWeight: FontWeight.w300),
-			);
-			} else {
-			return new Container(
-				height: 0.0,
-			);
-		}
-	}
 
 	Widget showLogo() {
 		return new Hero(
@@ -187,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
 					color: Colors.grey,
 					)),
 				validator: (value) => value.isEmpty ? 'Le nom d\'utilisateur ne peut pas être vide' : null,
-				onSaved: (value) => _email = value.trim(),
+				onSaved: (value) => _username = value.trim(),
 			),
 		);
 	}
@@ -216,7 +223,6 @@ class _LoginPageState extends State<LoginPage> {
 			padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
 			child: new TextFormField(
 				maxLines: 1,
-				obscureText: true,
 				autofocus: false,
 				decoration: new InputDecoration(
 						hintText: 'URL Pronote',
@@ -224,8 +230,14 @@ class _LoginPageState extends State<LoginPage> {
 							Icons.http,
 							color: Colors.grey,
 						)),
-				validator: (value) => value.isEmpty ? 'L\'URL Pronote ne peut pas être vide' : null,
-				onSaved: (value) => _password = value.trim(),
+				validator: (value) {
+					String message = null;
+					RegExp url = RegExp(r'(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w-]*)*\/?\??([^#\n\r]*)?#?([^\n\r]*)');
+					if(!url.hasMatch(value)) message = 'Veuillez préciser une URL valide';
+					if(value.isEmpty) message = 'L\'URL Pronote ne peut pas être vide';
+					return message;
+				},
+				onSaved: (value) => _pronoteURL = value.trim(),
 			),
 		);
 	}
