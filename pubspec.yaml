@@ -24,6 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
   english_words: ^3.1.5
+  http: ^0.12.2
+  shared_preferences: ^0.4.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,6 +46,14 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+   - assets/
+
+  fonts:
+    - family: Product Sans
+      fonts:
+        - asset: fonts/ProductSans-Regular.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
