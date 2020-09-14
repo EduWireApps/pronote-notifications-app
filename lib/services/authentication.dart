@@ -50,6 +50,8 @@ class Auth implements BaseAuth {
         if (!jsonData['success']) {
             throw (jsonData['message']);
         } else {
+            (await getInstance()).setBool('logged', true);
+            (await getInstance()).setString('username', jsonData['name']);
             return jsonData['name'];
         }
     }

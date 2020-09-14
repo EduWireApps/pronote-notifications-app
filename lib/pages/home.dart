@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
   Widget showTodoList() {
       return Center(
         child: Text(
-            "Welcome. Your list is empty",
+            'Welcome. Your name is ${widget.userId}',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 30.0),
         )

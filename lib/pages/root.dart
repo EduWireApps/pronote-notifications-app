@@ -50,8 +50,8 @@ class _RootPageState extends State<RootPage> {
 
 	void logoutCallback() {
 		setState(() {
-		authStatus = AuthStatus.NOT_LOGGED_IN;
-		_userId = "";
+			authStatus = AuthStatus.NOT_LOGGED_IN;
+			_userId = "";
 		});
 	}
 
