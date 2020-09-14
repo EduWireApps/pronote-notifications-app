@@ -156,6 +156,7 @@ class _LoginPageState extends State<LoginPage> {
 				shrinkWrap: true,
 				children: <Widget>[
 					showLogo(),
+					showInformation(),
 					showEmailInput(),
 					showPasswordInput(),
 					showPronoteURL(),
@@ -169,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
 		return new Hero(
 			tag: 'hero',
 			child: Padding(
-				padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
+				padding: EdgeInsets.fromLTRB(0.0, 60.0, 0.0, 0.0),
 				child: CircleAvatar(
 				backgroundColor: Colors.transparent,
 				radius: 48.0,
@@ -181,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
 
 	Widget showEmailInput() {
 		return Padding(
-			padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
+			padding: const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 0.0),
 			child: new TextFormField(
 				maxLines: 1,
 				keyboardType: TextInputType.emailAddress,
@@ -213,6 +214,27 @@ class _LoginPageState extends State<LoginPage> {
 					)),
 				validator: (value) => value.isEmpty ? 'Le mot de passe ne peut pas être vide' : null,
 				onSaved: (value) => _password = value.trim(),
+			),
+		);
+	}
+
+	Widget showInformation() {
+		return Padding(
+			padding: const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 0.0),
+			child: new DefaultTextStyle(
+				style: TextStyle(fontSize: 36, color: Colors.blue),
+				child: Center(
+					child: Column(
+						mainAxisAlignment: MainAxisAlignment.center,
+						children: [
+							const Text(
+								'Merci de renseigner vos identifiants Pronote. L\'URL Pronote est l\'adresse dans votre navigateur lorsque vous êtes sur pronote (pas sur l\'ENT).',
+								style: TextStyle(fontSize: 15, color: Colors.green),
+								textAlign: TextAlign.center
+							),
+						],
+					),
+				),
 			),
 		);
 	}
