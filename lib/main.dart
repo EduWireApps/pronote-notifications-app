@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/services/authentication.dart';
+import 'package:pronote_notifications/services/push_notifications.dart';
 import 'package:pronote_notifications/pages/root.dart';
 
 void main() {

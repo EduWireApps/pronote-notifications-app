@@ -7,7 +7,7 @@ class LoginPage extends StatefulWidget {
 	LoginPage({this.auth, this.loginCallback});
 
 	final BaseAuth auth;
-	final VoidCallback loginCallback;
+	final Function loginCallback;
 
 	@override
 	State<StatefulWidget> createState() => new _LoginPageState();
@@ -56,17 +56,14 @@ class _LoginPageState extends State<LoginPage> {
 				showErrorDialog('Aucune connexion', 'Accès à Internet impossible, veuillez vérifier votre connexion.');
 				return;
 			}
-			String userId = "";
 			try {
-				userId = await widget.auth.signIn(_username, _password, _pronoteURL);
-				print('Signed in: $userId');
+				final casList = await widget.auth.register(_username, _password, _pronoteURL);
+				_selectCAS(casList);
+				//print('Signed in: ${userData.fullName}');
 				setState(() {
 					_isLoading = false;
 				});
-
-				if (userId.length > 0 && userId != null) {
-					widget.loginCallback();
-				}
+				// widget.loginCallback(userData);
 			} catch (e) {
 				print('Error: $e');
 				if (e is String) {
@@ -90,6 +87,22 @@ class _LoginPageState extends State<LoginPage> {
 			setState(() {
 				_isLoading = false;
 			});
+		}
+	}
+
+	Future _selectCAS(List possibleCas) async {
+		switch (await showDialog(
+				context: context,
+				child: SimpleDialog(
+					title: Text('Alert Dialog Title'),
+					children: possibleCas.map((casName) => SimpleDialogOption(child: Text(casName))).toList(),
+				))) {
+			case 1:
+				print('cas one');
+				break;
+			case 2:
+				print('cas two');
+				break;
 		}
 	}
 

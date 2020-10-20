@@ -20,38 +20,45 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage> {
 	AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
-	String _userId = "";
+	UserData _userData;
 
 	@override
 	void initState() {
 		super.initState();
 
-		widget.auth.getCurrentUser().then((user) {
-			setState(() {
-				if (user != null) {
-				_userId = user;
+		widget.auth.isLogged().then((isLogged) {
+			if (!isLogged) {
+				setState(() {
+					authStatus = AuthStatus.NOT_LOGGED_IN;
+				});
+			} else {
+				try {
+					widget.auth.login().then((userData) {
+						setState(() {
+							_userData = userData;
+							authStatus = AuthStatus.LOGGED_IN;
+						});
+					});
+				} catch (e) {
+					setState(() {
+						authStatus = AuthStatus.NOT_LOGGED_IN;
+					});
 				}
-				authStatus =
-					user == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
-			});
+			}
 		});
   	}
 
-	void loginCallback() {
-		widget.auth.getCurrentUser().then((user) {
+	void loginCallback(UserData userData) {
 			setState(() {
-				_userId = user.toString();
+				_userData = userData;
+				authStatus = AuthStatus.LOGGED_IN;
 			});
-		});
-		setState(() {
-			authStatus = AuthStatus.LOGGED_IN;
-		});
 	}
 
 	void logoutCallback() {
 		setState(() {
 			authStatus = AuthStatus.NOT_LOGGED_IN;
-			_userId = "";
+			_userData = null;
 		});
 	}
 
@@ -77,9 +84,9 @@ class _RootPageState extends State<RootPage> {
 			);
 			break;
 		case AuthStatus.LOGGED_IN:
-			if (_userId.length > 0 && _userId != null) {
+			if (_userData != null) {
 				return new HomePage(
-					userId: _userId,
+					userData: _userData,
 					auth: widget.auth,
 					logoutCallback: logoutCallback,
 				);

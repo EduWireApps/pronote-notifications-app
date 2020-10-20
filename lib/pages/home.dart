@@ -1,13 +1,15 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/services/authentication.dart';
 
 class HomePage extends StatefulWidget {
-	HomePage({Key key, this.auth, this.userId, this.logoutCallback})
+	HomePage({Key key, this.auth, this.userData, this.logoutCallback})
 		: super(key: key);
 
 	final BaseAuth auth;
 	final VoidCallback logoutCallback;
-	final String userId;
+	final UserData userData;
 
 	@override
 	State<StatefulWidget> createState() => new _HomePageState();
@@ -24,99 +26,71 @@ class _HomePageState extends State<HomePage> {
 		//_checkEmailVerification();
 	}
 
-//  void _checkEmailVerification() async {
-//    _isEmailVerified = await widget.auth.isEmailVerified();
-//    if (!_isEmailVerified) {
-//      _showVerifyEmailDialog();
-//    }
-//  }
+	@override
+	Widget build(BuildContext context) {
+		final avatar = Padding(
+			padding: EdgeInsets.all(20),
+			child: Hero(
+					tag: 'logo',
+					child: SizedBox(
+						height: 160,
+						child: CircleAvatar(
+							radius: 50,
+							backgroundImage: MemoryImage(Base64Codec().decode(widget.userData.avatarBase64)),
+						),
+					)
+			),
+		);
+		final description = Padding(
+			padding: EdgeInsets.all(10),
+			child: RichText(
+				textAlign: TextAlign.justify,
+				text: TextSpan(
+						text: 'Anim ad ex officia nulla anim ipsum ut elit minim id non ad enim aute. Amet enim adipisicing excepteur ea fugiat excepteur enim veniam veniam do quis magna. Cupidatat quis exercitation ut ipsum dolor ipsum. Qui commodo nostrud magna consectetur. Nostrud culpa laboris Lorem aliqua non ut veniam culpa deserunt laborum occaecat officia.',
+						style: TextStyle(color: Colors.black, fontSize: 20)
+				),
+			),
+		);
+		final buttonLogout = FlatButton(
+				child: Text(
+					'Logout', style: TextStyle(color: Colors.black87, fontSize: 16),),
+				onPressed: () {
+					logout();
+				}
+		);
+		return SafeArea(
+				child: Scaffold(
+					body: Center(
+						child: ListView(
+							shrinkWrap: true,
+							padding: EdgeInsets.symmetric(horizontal: 20),
+							children: <Widget>[
+								avatar,
+								description,
+								buttonLogout
+							],
+						),
+					),
+				)
+		);
+	}
 
-//  void _resentVerifyEmail(){
-//    widget.auth.sendEmailVerification();
-//    _showVerifyEmailSentDialog();
-//  }
-
-//  void _showVerifyEmailDialog() {
-//    showDialog(
-//      context: context,
-//      builder: (BuildContext context) {
-//        // return object of type Dialog
-//        return AlertDialog(
-//          title: new Text("Verify your account"),
-//          content: new Text("Please verify account in the link sent to email"),
-//          actions: <Widget>[
-//            new FlatButton(
-//              child: new Text("Resent link"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//                _resentVerifyEmail();
-//              },
-//            ),
-//            new FlatButton(
-//              child: new Text("Dismiss"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
-
-//  void _showVerifyEmailSentDialog() {
-//    showDialog(
-//      context: context,
-//      builder: (BuildContext context) {
-//        // return object of type Dialog
-//        return AlertDialog(
-//          title: new Text("Verify your account"),
-//          content: new Text("Link to verify account has been sent to your email"),
-//          actions: <Widget>[
-//            new FlatButton(
-//              child: new Text("Dismiss"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
-
-	signOut() async {
+	logout() async {
 		try {
-		await widget.auth.signOut();
-		widget.logoutCallback();
+			await widget.auth.logout();
+			widget.logoutCallback();
 		} catch (e) {
-		print(e);
+			print(e);
 		}
 	}
 
   Widget showTodoList() {
       return Center(
         child: Text(
-            'Welcome. Your name is ${widget.userId}',
+            'Welcome. Your name is ${widget.userData.fullName}',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 30.0),
         )
       );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Flutter login demo'),
-          actions: <Widget>[
-            new FlatButton(
-                child: new Text('Logout',
-                    style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-                onPressed: signOut)
-          ],
-        ),
-        body: showTodoList()
-	);
   }
 }
