@@ -50,12 +50,12 @@ class _MyAppState extends State<MyApp> {
       onLaunch: (Map<String, dynamic> msg) {
         print(" onLaunch called ${(msg)}");
       },
-      onResume: (Map<String, dynamic> msg) {
-        print(" onResume called ${(msg)}");
+      onResume: (Map<String, dynamic> notificationData) {
+        print(" onResume called ${(notificationData)}");
       },
-      onMessage: (Map<String, dynamic> msg) {
-        showNotification(msg);
-        print(" onMessage called ${(msg)}");
+      onMessage: (Map<String, dynamic> notificationData) {
+        showNotification(notificationData);
+        print(" onMessage called ${(notificationData)}");
       },
     );
     firebaseMessaging.requestNotificationPermissions(
@@ -69,16 +69,17 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  showNotification(Map<String, dynamic> msg) async {
+  showNotification(Map<String, dynamic> notificationData) async {
     var android = new AndroidNotificationDetails(
-      'sdffds dsffds',
-      "CHANNLE NAME",
-      "channelDescription",
+      notificationData['notification']['title'],
+      notificationData['notification']['title'],
+      notificationData['notification']['title'],
+      styleInformation: BigTextStyleInformation(''),
     );
     var iOS = new IOSNotificationDetails();
-    var platform = new NotificationDetails();
+    var platform = new NotificationDetails(android: android, iOS: iOS);
     await flutterLocalNotificationsPlugin.show(
-        0, "This is title", "this is demo", platform);
+        0, notificationData['notification']['title'], notificationData['notification']['body'], platform);
   }
 
   update(String token) async {
