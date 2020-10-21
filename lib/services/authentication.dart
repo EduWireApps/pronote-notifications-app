@@ -2,14 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pronote_notifications/services/push_notifications.dart';
 
 class UserData {
     String fullName;
     String studentClass;
     String avatarBase64;
 
-    UserData(this.fullName, this.studentClass, this.avatarBase64);
+    bool notificationsHomeworks;
+    bool notificationsMarks;
+
+    UserData(this.fullName, this.studentClass, this.avatarBase64, this.notificationsHomeworks, this.notificationsMarks);
 }
 
 abstract class BaseAuth {
@@ -22,6 +24,8 @@ abstract class BaseAuth {
     Future<void> logout();
     // pour s'enregistrer (au démarrage). Similaire au login() mais le serveur test la connexion à Pronote en +
     Future<UserData> register(String username, String password, String pronoteURL);
+    // pour modifier les préférences
+    Future<void> updateSettings(bool notificationsHomeworks, bool notificationsMarks);
 
 }
 
@@ -32,54 +36,37 @@ class Auth implements BaseAuth {
     }
 
     Future<bool> isLogged() async {
-        var fcmToken = (await getInstance()).getString('fcm_token');
-        if(fcmToken == null) {
-            PushNotificationsManager().init();
-            fcmToken = (await getInstance()).getString('fcm_token');
-        }
         final logged = (await getInstance()).getBool('logged') ?? false;
         return logged;
     }
 
     Future<void> logout() async {
         (await getInstance()).setBool('logged', false);
+        (await getInstance()).setString('jwt', null);
     }
 
     Future<UserData> login() async {
-        final instance = await this.getInstance();
-        final username = instance.getString('username');
-        final password = instance.getString('password');
-        final pronoteURL = instance.getString('pronote_url');
-        final response = await this.callAPI(username, password, pronoteURL, 'login');
+        final shared = await this.getInstance();
+        final response = await callAPI('login');
         final jsonData = json.decode(response.body);
         if (!jsonData['success']) {
             throw (jsonData['message']);
         } else {
-            print(jsonData['avatar_base64']);
-            return new UserData(jsonData['full_name'], jsonData['student_class'], jsonData['avatar_base64']);
+            return new UserData(jsonData['full_name'], jsonData['student_class'], jsonData['avatar_base64'], jsonData['notifications_homeworks'], jsonData['notifications_marks']);
         }
     }
 
-    Future<List> register(String username, String password, String pronoteURL) async {
-        final response = await this.callAPI(username, password, pronoteURL, 'register');
-        final jsonData = json.decode(response.body);
-        if (!jsonData['success']) {
-            throw (jsonData['message']);
-        } else {
-            final instance = await getInstance();
-            instance.setBool('logged', true);
-            instance.setString('username', username);
-            instance.setString('password', password);
-            instance.setString('pronote_url', pronoteURL);
-            return new UserData(jsonData['full_name'], jsonData['student_class'], jsonData['avatar_base64']);
-        }
+    Future<void> updateSettings (bool notificationsHomeworks, bool notificationsMarks) async {
+        final response = await callAPI('settings', {
+            'notifications_homeworks': notificationsHomeworks.toString(),
+            'notifications_marks': notificationsMarks.toString()
+        });
+        return;
     }
 
-
-
-    Future<http.Response> callAPI (String username, String password, String pronoteURL, String authType) async {
+    Future<UserData> register(String username, String password, String pronoteURL) async {
         final response = await http.post(
-            "https://3fca5b61feaf.ngrok.io/$authType",
+            "https://3fca5b61feaf.ngrok.io/register",
             headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8',
             },
@@ -89,6 +76,27 @@ class Auth implements BaseAuth {
                 'pronote_url': pronoteURL,
                 'fcm_token': (await getInstance()).getString('fcm-token')
             }),
+        );
+        final jsonData = json.decode(response.body);
+        if (!jsonData['success']) {
+            throw (jsonData['message']);
+        } else {
+            final instance = await getInstance();
+            instance.setBool('logged', true);
+            instance.setString('jwt', jsonData['jwt']);
+            return new UserData(jsonData['full_name'], jsonData['student_class'], jsonData['avatar_base64'], jsonData['notifications_homeworks'], jsonData['notifications_marks']);
+        }
+    }
+
+    Future<http.Response> callAPI (String route, [Object body]) async {
+        final token = (await getInstance()).getString('jwt');
+        final response = await http.post(
+            "https://3fca5b61feaf.ngrok.io/$route",
+            headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': token
+            },
+            body: jsonEncode(body ?? {}),
         );
         return response;
     }

@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 			_isLoading = true;
 		});
 		if (validateAndSave()) {
-			try {
+			/*try {
 				final result = await InternetAddress.lookup('example.com');
 				if (!(result.isNotEmpty && result[0].rawAddress.isNotEmpty)) {
 					setState(() {
@@ -55,15 +55,14 @@ class _LoginPageState extends State<LoginPage> {
 				});
 				showErrorDialog('Aucune connexion', 'Accès à Internet impossible, veuillez vérifier votre connexion.');
 				return;
-			}
+			}*/
 			try {
-				final casList = await widget.auth.register(_username, _password, _pronoteURL);
-				_selectCAS(casList);
-				//print('Signed in: ${userData.fullName}');
+				final userData = await widget.auth.register(_username, _password, _pronoteURL);
+				print('Signed in: ${userData.fullName}');
 				setState(() {
 					_isLoading = false;
 				});
-				// widget.loginCallback(userData);
+				widget.loginCallback(userData);
 			} catch (e) {
 				print('Error: $e');
 				if (e is String) {
@@ -87,22 +86,6 @@ class _LoginPageState extends State<LoginPage> {
 			setState(() {
 				_isLoading = false;
 			});
-		}
-	}
-
-	Future _selectCAS(List possibleCas) async {
-		switch (await showDialog(
-				context: context,
-				child: SimpleDialog(
-					title: Text('Alert Dialog Title'),
-					children: possibleCas.map((casName) => SimpleDialogOption(child: Text(casName))).toList(),
-				))) {
-			case 1:
-				print('cas one');
-				break;
-			case 2:
-				print('cas two');
-				break;
 		}
 	}
 

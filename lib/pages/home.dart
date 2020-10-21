@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/services/authentication.dart';
+import 'package:settings_ui/settings_ui.dart';
 
 class HomePage extends StatefulWidget {
 	HomePage({Key key, this.auth, this.userData, this.logoutCallback})
@@ -18,11 +19,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
 	//bool _isEmailVerified = false;
+	bool notificationsHomeworks;
+	bool notificationsMarks;
 
 	@override
 	void initState() {
 		super.initState();
-
+		notificationsHomeworks = widget.userData.notificationsHomeworks;
+		notificationsMarks = widget.userData.notificationsMarks;
 		//_checkEmailVerification();
 	}
 
@@ -60,17 +64,69 @@ class _HomePageState extends State<HomePage> {
 		);
 		return SafeArea(
 				child: Scaffold(
-					body: Center(
-						child: ListView(
-							shrinkWrap: true,
-							padding: EdgeInsets.symmetric(horizontal: 20),
-							children: <Widget>[
-								avatar,
-								description,
-								buttonLogout
-							],
-						),
+					appBar: new AppBar(
+						title: new Text('Pronote Notifications'),
 					),
+					body: SettingsList(
+						sections: [
+							SettingsSection(
+								title: 'Vos informations',
+								tiles: [
+									SettingsTile(
+										title: widget.userData.fullName,
+										leading: Icon(Icons.work),
+										onTap: () {},
+										enabled: false,
+									),
+									SettingsTile(
+										title: widget.userData.studentClass,
+										leading: Icon(Icons.school),
+										onTap: () {},
+										enabled: false,
+									),
+								],
+							),
+							SettingsSection(
+								title: 'Notifications',
+								tiles: [
+									SettingsTile.switchTile(
+										title: 'Nouveaux devoirs',
+										leading: Icon(Icons.work),
+										switchValue: notificationsHomeworks,
+										onToggle: (bool value) async {
+											setState(() {
+												notificationsHomeworks = value;
+											});
+											await widget.auth.updateSettings(notificationsHomeworks, notificationsMarks);
+										},
+									),
+									SettingsTile.switchTile(
+										title: 'Nouvelles notes',
+										leading: Icon(Icons.assignment_turned_in_sharp),
+										switchValue: notificationsMarks,
+										onToggle: (bool value) {
+											setState(() {
+											  notificationsMarks = value;
+											});
+										},
+										enabled: true
+									),
+								],
+							),
+							SettingsSection(
+								title: 'Compte',
+								tiles: [
+									SettingsTile(
+										title: 'Déconnexion',
+										leading: Icon(Icons.exit_to_app),
+										onTap: () {
+											logout();
+										},
+									),
+								],
+							),
+						],
+					)
 				)
 		);
 	}
