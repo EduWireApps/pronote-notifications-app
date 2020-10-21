@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
       notificationData['notification']['title'],
       notificationData['notification']['title'],
       notificationData['notification']['title'],
-      styleInformation: BigTextStyleInformation(''),
+      styleInformation: BigTextStyleInformation('')
     );
     var iOS = new IOSNotificationDetails();
     var platform = new NotificationDetails(android: android, iOS: iOS);

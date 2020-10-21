@@ -104,10 +104,11 @@ class _HomePageState extends State<HomePage> {
 										title: 'Nouvelles notes',
 										leading: Icon(Icons.assignment_turned_in_sharp),
 										switchValue: notificationsMarks,
-										onToggle: (bool value) {
+										onToggle: (bool value) async {
 											setState(() {
 											  notificationsMarks = value;
 											});
+											await widget.auth.updateSettings(notificationsHomeworks, notificationsMarks);
 										},
 										enabled: true
 									),
