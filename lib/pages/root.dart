@@ -32,18 +32,16 @@ class _RootPageState extends State<RootPage> {
 					authStatus = AuthStatus.NOT_LOGGED_IN;
 				});
 			} else {
-				try {
-					widget.auth.login().then((userData) {
-						setState(() {
-							_userData = userData;
-							authStatus = AuthStatus.LOGGED_IN;
-						});
+				widget.auth.login().then((userData) {
+					setState(() {
+						_userData = userData;
+						authStatus = AuthStatus.LOGGED_IN;
 					});
-				} catch (e) {
+				}).catchError((err) => {
 					setState(() {
 						authStatus = AuthStatus.NOT_LOGGED_IN;
-					});
-				}
+					})
+				});
 			}
 		});
   	}

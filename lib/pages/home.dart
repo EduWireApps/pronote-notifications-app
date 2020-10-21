@@ -22,6 +22,8 @@ class _HomePageState extends State<HomePage> {
 	bool notificationsHomeworks;
 	bool notificationsMarks;
 
+	bool _loggingOut = false;
+
 	@override
 	void initState() {
 		super.initState();
@@ -32,36 +34,6 @@ class _HomePageState extends State<HomePage> {
 
 	@override
 	Widget build(BuildContext context) {
-		final avatar = Padding(
-			padding: EdgeInsets.all(20),
-			child: Hero(
-					tag: 'logo',
-					child: SizedBox(
-						height: 160,
-						child: CircleAvatar(
-							radius: 50,
-							backgroundImage: MemoryImage(Base64Codec().decode(widget.userData.avatarBase64)),
-						),
-					)
-			),
-		);
-		final description = Padding(
-			padding: EdgeInsets.all(10),
-			child: RichText(
-				textAlign: TextAlign.justify,
-				text: TextSpan(
-						text: 'Anim ad ex officia nulla anim ipsum ut elit minim id non ad enim aute. Amet enim adipisicing excepteur ea fugiat excepteur enim veniam veniam do quis magna. Cupidatat quis exercitation ut ipsum dolor ipsum. Qui commodo nostrud magna consectetur. Nostrud culpa laboris Lorem aliqua non ut veniam culpa deserunt laborum occaecat officia.',
-						style: TextStyle(color: Colors.black, fontSize: 20)
-				),
-			),
-		);
-		final buttonLogout = FlatButton(
-				child: Text(
-					'Logout', style: TextStyle(color: Colors.black87, fontSize: 16),),
-				onPressed: () {
-					logout();
-				}
-		);
 		return SafeArea(
 				child: Scaffold(
 					appBar: new AppBar(
@@ -74,24 +46,22 @@ class _HomePageState extends State<HomePage> {
 								tiles: [
 									SettingsTile(
 										title: widget.userData.fullName,
-										leading: Icon(Icons.work),
-										onTap: () {},
-										enabled: false,
+										leading: Icon(Icons.account_circle),
+										onTap: () {}
 									),
 									SettingsTile(
-										title: widget.userData.studentClass,
+										title: "${widget.userData.establishment} (${widget.userData.studentClass})",
 										leading: Icon(Icons.school),
-										onTap: () {},
-										enabled: false,
+										onTap: () {}
 									),
 								],
 							),
 							SettingsSection(
-								title: 'Notifications',
+								title: 'Gestion des notifications',
 								tiles: [
 									SettingsTile.switchTile(
 										title: 'Nouveaux devoirs',
-										leading: Icon(Icons.work),
+										leading: Icon(Icons.today),
 										switchValue: notificationsHomeworks,
 										onToggle: (bool value) async {
 											setState(() {
@@ -102,7 +72,7 @@ class _HomePageState extends State<HomePage> {
 									),
 									SettingsTile.switchTile(
 										title: 'Nouvelles notes',
-										leading: Icon(Icons.assignment_turned_in_sharp),
+										leading: Icon(Icons.assessment),
 										switchValue: notificationsMarks,
 										onToggle: (bool value) async {
 											setState(() {
@@ -119,8 +89,18 @@ class _HomePageState extends State<HomePage> {
 								tiles: [
 									SettingsTile(
 										title: 'Déconnexion',
-										leading: Icon(Icons.exit_to_app),
+										leading: _loggingOut ? Container(
+											height: 15,
+											width: 15,
+											margin: EdgeInsets.all(5),
+											child: CircularProgressIndicator(
+													strokeWidth: 2.0
+											),
+										) : Icon(Icons.exit_to_app),
 										onTap: () {
+											setState(() {
+												_loggingOut = true;
+											});
 											logout();
 										},
 									),
@@ -136,6 +116,7 @@ class _HomePageState extends State<HomePage> {
 		try {
 			await widget.auth.logout();
 			widget.logoutCallback();
+			_loggingOut = false;
 		} catch (e) {
 			print(e);
 		}

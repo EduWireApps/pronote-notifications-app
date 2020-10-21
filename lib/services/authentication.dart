@@ -7,11 +7,12 @@ class UserData {
     String fullName;
     String studentClass;
     String avatarBase64;
+    String establishment;
 
     bool notificationsHomeworks;
     bool notificationsMarks;
 
-    UserData(this.fullName, this.studentClass, this.avatarBase64, this.notificationsHomeworks, this.notificationsMarks);
+    UserData(this.fullName, this.establishment, this.studentClass, this.avatarBase64, this.notificationsHomeworks, this.notificationsMarks);
 }
 
 abstract class BaseAuth {
@@ -41,18 +42,18 @@ class Auth implements BaseAuth {
     }
 
     Future<void> logout() async {
+        await callAPI('logout');
         (await getInstance()).setBool('logged', false);
         (await getInstance()).setString('jwt', null);
     }
 
     Future<UserData> login() async {
-        final shared = await this.getInstance();
         final response = await callAPI('login');
         final jsonData = json.decode(response.body);
         if (!jsonData['success']) {
             throw (jsonData['message']);
         } else {
-            return new UserData(jsonData['full_name'], jsonData['student_class'], jsonData['avatar_base64'], jsonData['notifications_homeworks'], jsonData['notifications_marks']);
+            return new UserData(jsonData['full_name'], jsonData['establishment'], jsonData['student_class'], jsonData['avatar_base64'], jsonData['notifications_homeworks'], jsonData['notifications_marks']);
         }
     }
 
@@ -84,7 +85,7 @@ class Auth implements BaseAuth {
             final instance = await getInstance();
             instance.setBool('logged', true);
             instance.setString('jwt', jsonData['jwt']);
-            return new UserData(jsonData['full_name'], jsonData['student_class'], jsonData['avatar_base64'], jsonData['notifications_homeworks'], jsonData['notifications_marks']);
+            return new UserData(jsonData['full_name'], jsonData['establishment'], jsonData['student_class'], jsonData['avatar_base64'], jsonData['notifications_homeworks'], jsonData['notifications_marks']);
         }
     }
 
