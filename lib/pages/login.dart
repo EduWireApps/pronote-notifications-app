@@ -103,14 +103,7 @@ class _LoginPageState extends State<LoginPage> {
 
 	@override
 	Widget build(BuildContext context) {
-		return _isLoading ?
-			Scaffold(
-				body: Container(
-					alignment: Alignment.center,
-					child: CircularProgressIndicator(),
-				),
-			)
-		: new Scaffold(
+		return new Scaffold(
 			appBar: new AppBar(
 				title: new Text('Pronote Notifications'),
 			),
@@ -127,14 +120,20 @@ class _LoginPageState extends State<LoginPage> {
 			context: context,
 			builder: (BuildContext context) {
 				// return object of type Dialog
-				return CupertinoAlertDialog(
-					title: new Text("Une erreur est survenue"),
-					content: new Text(_errorMessage),
+				return AlertDialog(
+					title: new Text("Comment récupérer l'URL Pronote ?"),
+					content: Wrap(
+						children: [
+							new Text('Cette URL est présente en haut de votre navigateur lorsque vous êtes connecté sur Pronote. Cette URL doit ressembler à https://0310047h.index-education.net/pronote/. Attention, ce n\'est pas l\'URL de l\'ENT mais bien celle de Pronote !\n'),
+							new Image(image: AssetImage('url-pronote.png'))
+						],
+					),
 					actions: <Widget>[
 						// usually buttons at the bottom of the dialog
 						new FlatButton(
-							child: new Text("Fermer"),
+							child: new Text("J'ai compris !"),
 							onPressed: () {
+								Navigator.pop(context, true);
 							},
 						),
 					],
@@ -209,9 +208,18 @@ class _LoginPageState extends State<LoginPage> {
 						mainAxisAlignment: MainAxisAlignment.center,
 						children: [
 							const Text(
-									'Merci de renseigner vos identifiants Pronote. L\'URL Pronote est l\'adresse dans votre navigateur lorsque vous êtes sur pronote (pas sur l\'ENT).',
-									style: TextStyle(fontSize: 15, color: Colors.green),
+									'Bienvenue, merci de renseigner vos identifiants pour commencer à recevoir les notifications ! 🔔',
+									style: TextStyle(fontSize: 15, color: Colors.black),
 									textAlign: TextAlign.center
+							),
+							new GestureDetector(
+									onTap: () {
+											_showDialog();
+									},
+									child: const Text('Qu\'est-ce que "URL Pronote" ?',
+										style: TextStyle(fontSize: 15, color: Colors.black, decoration: TextDecoration.underline),
+										textAlign: TextAlign.center
+									)
 							),
 						],
 					),
@@ -224,6 +232,7 @@ class _LoginPageState extends State<LoginPage> {
 		return Padding(
 			padding: const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 0.0),
 			child: new TextFormField(
+				readOnly: _isLoading,
 				maxLines: 1,
 				keyboardType: TextInputType.name,
 				autofocus: false,
@@ -245,6 +254,7 @@ class _LoginPageState extends State<LoginPage> {
 		return Padding(
 			padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
 			child: new TextFormField(
+				readOnly: _isLoading,
 				maxLines: 1,
 				obscureText: true,
 				autofocus: false,
@@ -265,6 +275,7 @@ class _LoginPageState extends State<LoginPage> {
 		return Padding(
 			padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
 			child: new TextFormField(
+				readOnly: _isLoading,
 				maxLines: 1,
 				keyboardType: TextInputType.url,
 				autofocus: false,
@@ -277,7 +288,7 @@ class _LoginPageState extends State<LoginPage> {
 					)
 				),
 				validator: (value) {
-					String message = null;
+					String message;
 					RegExp url = RegExp(r'(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w-]*)*\/?\??([^#\n\r]*)?#?([^\n\r]*)');
 					if(!url.hasMatch(value)) message = 'Veuillez préciser une URL valide';
 					if(value.isEmpty) message = 'L\'URL Pronote ne peut pas être vide';
@@ -299,9 +310,10 @@ class _LoginPageState extends State<LoginPage> {
 						borderRadius: new BorderRadius.circular(30.0)
 					),
 					color: Color(0xff29826c),
-					child: new Text('Connexion',
-					style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-					onPressed: validateAndSubmit,
+					child: _isLoading ? new LinearProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(41, 170, 108, 1))) : new Text('Connexion',
+						style: new TextStyle(fontSize: 20.0, color: Colors.white),
+					),
+					onPressed: _isLoading ? () => {} : validateAndSubmit,
 				),
 			)
 		);
