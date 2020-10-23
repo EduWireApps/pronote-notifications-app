@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 		return SafeArea(
 				child: Scaffold(
 					appBar: new AppBar(
-						title: new Text('Pronote Notifications'),
+						title: new Text('Notifications pour Pronote'),
 					),
 					body: SettingsList(
 						sections: [

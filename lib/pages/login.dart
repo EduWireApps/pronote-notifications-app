@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
 					setState(() {
 						_isLoading = false;
 						if (e.message.contains('Unexpected character')) {
-							showErrorDialog('Une erreur est survenue', 'Le serveur de Pronote Notifications est actuellement injoignable. Merci de patienter puis réessayez !');
+							showErrorDialog('Une erreur est survenue', 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
 						} else {
 							showErrorDialog('Une erreur est survenue', e.message);
 						}
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
 	Widget build(BuildContext context) {
 		return new Scaffold(
 			appBar: new AppBar(
-				title: new Text('Pronote Notifications'),
+				title: new Text('Notifications pour Pronote'),
 			),
 			body: Stack(
 				children: <Widget>[

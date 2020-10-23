@@ -91,7 +91,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-        title: 'Pronote Notifications',
+        title: 'Notifications pour Pronote ',
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
           primarySwatch: colorCustom,
