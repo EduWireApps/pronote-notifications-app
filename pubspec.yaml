@@ -31,6 +31,12 @@ dependencies:
   firebase_messaging: ^7.0.3
   settings_ui: ^0.4.0
   flutter_local_notifications: ^2.0.2
+  flutter_launcher_icons: ^0.8.1
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/launcher-icon.png"
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -60,6 +66,7 @@ flutter:
   assets:
     - pronote-icon.png
     - url-pronote.png
+    - launcher-icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

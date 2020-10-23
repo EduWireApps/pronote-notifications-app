@@ -54,7 +54,9 @@ class _MyAppState extends State<MyApp> {
         print(" onResume called ${(notificationData)}");
       },
       onMessage: (Map<String, dynamic> notificationData) {
-        showNotification(notificationData);
+        if (notificationData['data']['type'] != null) {
+          showNotification(notificationData);
+        }
         print(" onMessage called ${(notificationData)}");
       },
     );

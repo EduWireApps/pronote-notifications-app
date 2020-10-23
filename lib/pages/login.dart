@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/services/authentication.dart';
-import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
 	LoginPage({this.auth, this.loginCallback});
@@ -19,9 +19,30 @@ class _LoginPageState extends State<LoginPage> {
 	String _username;
 	String _password;
 	String _pronoteURL;
-	String _errorMessage;
 
 	bool _isLoading;
+	final _usernameController = TextEditingController();
+	final _pronoteURLController = TextEditingController();
+
+	@override
+	void initState () {
+		super.initState();
+
+		setState(() {
+		  _isLoading = false;
+		});
+
+		SharedPreferences.getInstance().then((instance) {
+				final username = instance.getString('form_pronote_username');
+				final pronoteURL = instance.getString('form_pronote_url');
+				if (username != null && pronoteURL != null) {
+					setState(() {
+						_usernameController.text = username;
+						_pronoteURLController.text = pronoteURL;
+					});
+				}
+		});
+	}
 
 	// Check if form is valid before perform login or signup
 	bool validateAndSave() {
@@ -36,7 +57,6 @@ class _LoginPageState extends State<LoginPage> {
 	// Perform login or signup
 	void validateAndSubmit() async {
 		setState(() {
-			_errorMessage = "";
 			_isLoading = true;
 		});
 		if (validateAndSave()) {
@@ -89,16 +109,8 @@ class _LoginPageState extends State<LoginPage> {
 		}
 	}
 
-	@override
-	void initState() {
-		_errorMessage = "";
-		_isLoading = false;
-		super.initState();
-	}
-
 	void resetForm() {
 		_formKey.currentState.reset();
-		_errorMessage = "";
 	}
 
 	@override
@@ -236,7 +248,8 @@ class _LoginPageState extends State<LoginPage> {
 				maxLines: 1,
 				keyboardType: TextInputType.name,
 				autofocus: false,
-				initialValue: _username ?? null,
+				controller: _usernameController,
+				initialValue: null,
 				decoration: new InputDecoration(
 					hintText: 'Nom d\'utilisateur',
 					icon: new Icon(
@@ -279,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
 				maxLines: 1,
 				keyboardType: TextInputType.url,
 				autofocus: false,
-				initialValue: _pronoteURL ?? null,
+				controller: _pronoteURLController,
 				decoration: new InputDecoration(
 					hintText: 'URL Pronote',
 					icon: new Icon(
