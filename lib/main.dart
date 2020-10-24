@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pronote_notifications/services/authentication.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:pronote_notifications/auth.dart';
 import 'package:pronote_notifications/pages/root.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(new MyApp());
@@ -32,60 +29,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String textValue = 'Hello World !';
-  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  new FlutterLocalNotificationsPlugin();
+  
 
   @override
   void initState() {
     super.initState();
-
-    var android = new AndroidInitializationSettings('mipmap/ic_launcher');
-    var ios = new IOSInitializationSettings();
-    var platform = new InitializationSettings(android: android, iOS: ios);
-    flutterLocalNotificationsPlugin.initialize(platform);
-
-    firebaseMessaging.configure(
-      onLaunch: (Map<String, dynamic> msg) {
-        print(" onLaunch called ${(msg)}");
-      },
-      onResume: (Map<String, dynamic> notificationData) {
-        print(" onResume called ${(notificationData)}");
-      },
-      onMessage: (Map<String, dynamic> notificationData) {
-        if (notificationData['data']['type'] != null) {
-          showNotification(notificationData);
-        }
-        print(" onMessage called ${(notificationData)}");
-      },
-    );
-    firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, alert: true, badge: true));
-    firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings setting) {
-      print('IOS Setting Registed');
-    });
-    firebaseMessaging.getToken().then((token) {
-      update(token);
-    });
-  }
-
-  showNotification(Map<String, dynamic> notificationData) async {
-    var android = new AndroidNotificationDetails(
-      notificationData['notification']['title'],
-      notificationData['notification']['title'],
-      notificationData['notification']['title'],
-      styleInformation: BigTextStyleInformation('')
-    );
-    var iOS = new IOSNotificationDetails();
-    var platform = new NotificationDetails(android: android, iOS: iOS);
-    await flutterLocalNotificationsPlugin.show(
-        0, notificationData['notification']['title'], notificationData['notification']['body'], platform);
-  }
-
-  update(String token) async {
-    await (await SharedPreferences.getInstance()).setString('fcm-token', token);
   }
 
   @override

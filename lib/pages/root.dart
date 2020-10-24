@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/pages/login.dart';
-import 'package:pronote_notifications/services/authentication.dart';
+import 'package:pronote_notifications/auth.dart';
 import 'package:pronote_notifications/pages/home.dart';
+import 'package:pronote_notifications/firebase.dart';
+import 'package:pronote_notifications/widgets/dialogs.dart';
 
 enum AuthStatus {
 	NOT_DETERMINED,
@@ -25,6 +27,7 @@ class _RootPageState extends State<RootPage> {
 	@override
 	void initState() {
 		super.initState();
+    initFirebase();
 
 		widget.auth.isLogged().then((isLogged) {
 			if (!isLogged) {
@@ -32,16 +35,32 @@ class _RootPageState extends State<RootPage> {
 					authStatus = AuthStatus.NOT_LOGGED_IN;
 				});
 			} else {
-				widget.auth.login().then((userData) {
-					setState(() {
-						_userData = userData;
-						authStatus = AuthStatus.LOGGED_IN;
-					});
-				}).catchError((err) => {
-					setState(() {
-						authStatus = AuthStatus.NOT_LOGGED_IN;
-					})
-				});
+        try {
+          widget.auth.login().then((userData) {
+            setState(() {
+              _userData = userData;
+              authStatus = AuthStatus.LOGGED_IN;
+            });
+          });
+        } catch (e) {
+          print('Error: $e');
+          if (e is String) {
+            setState(() {
+              showErrorDialog(context, title: 'Une erreur est survenue', content: e);
+            });
+          } else {
+            if (e.message == null) showErrorDialog(context, title: 'Une erreur est survenue', content: 'Quelque chose s\'est mal passé durant la connexion...');
+            setState(() {
+              if (e.message.contains('Unexpected character')) {
+                showErrorDialog(context, title: 'Une erreur est survenue', content: 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
+              } else {
+                setState(() {
+                  authStatus = AuthStatus.NOT_LOGGED_IN;
+                });
+              }
+            });
+				  }
+        }
 			}
 		});
   	}

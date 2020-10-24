@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pronote_notifications/services/authentication.dart';
+import 'package:pronote_notifications/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pronote_notifications/widgets/dialogs.dart';
 
 class LoginPage extends StatefulWidget {
 	LoginPage({this.auth, this.loginCallback});
@@ -60,22 +60,6 @@ class _LoginPageState extends State<LoginPage> {
 			_isLoading = true;
 		});
 		if (validateAndSave()) {
-			/*try {
-				final result = await InternetAddress.lookup('example.com');
-				if (!(result.isNotEmpty && result[0].rawAddress.isNotEmpty)) {
-					setState(() {
-						_isLoading = false;
-					});
-					showErrorDialog('Aucune connexion', 'Accès à Internet impossible, veuillez vérifier votre connexion.');
-					return;
-				}
-			} on SocketException catch (_) {
-				setState(() {
-					_isLoading = false;
-				});
-				showErrorDialog('Aucune connexion', 'Accès à Internet impossible, veuillez vérifier votre connexion.');
-				return;
-			}*/
 			try {
 				final userData = await widget.auth.register(_username, _password, _pronoteURL);
 				print('Signed in: ${userData.fullName}');
@@ -88,16 +72,16 @@ class _LoginPageState extends State<LoginPage> {
 				if (e is String) {
 					setState(() {
 						_isLoading = false;
-						showErrorDialog('Une erreur est survenue', e);
+						showErrorDialog(context, title: 'Une erreur est survenue', content: e);
 					});
 				} else {
-					if (e.message == null) showErrorDialog('Une erreur est survenue', 'Quelque chose s\'est mal passé durant la connexion...');
+					if (e.message == null) showErrorDialog(context, title: 'Une erreur est survenue', content: 'Quelque chose s\'est mal passé durant la connexion...');
 					setState(() {
 						_isLoading = false;
 						if (e.message.contains('Unexpected character')) {
-							showErrorDialog('Une erreur est survenue', 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
+							showErrorDialog(context, title: 'Une erreur est survenue', content: 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
 						} else {
-							showErrorDialog('Une erreur est survenue', e.message);
+							showErrorDialog(context, title: 'Une erreur est survenue', content: e.message);
 						}
 					});
 				}
@@ -153,29 +137,6 @@ class _LoginPageState extends State<LoginPage> {
 			},
 		);
 	}
-
-
-  void showErrorDialog(String title, String content) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text(title),
-          content:
-              new Text(content),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("Fermer"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   Widget _showForm() {
     return new Container(
