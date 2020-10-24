@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pronote_notifications/firebase.dart';
 
 class UserData {
 
@@ -42,7 +43,7 @@ class Auth implements BaseAuth {
     }
 
     Future<UserData> register(String username, String password, String pronoteURL) async {
-        final sharedPreferences = await SharedPreferences.getInstance();
+        final fcmToken = await getDeviceToken();
         final response = await http.post(
             "https://pnotifications.atlanta-bot.fr/register",
             headers: <String, String>{
@@ -52,7 +53,7 @@ class Auth implements BaseAuth {
                 'pronote_username': username,
                 'pronote_password': password,
                 'pronote_url': pronoteURL,
-                'fcm_token': sharedPreferences.getString('fcm-token')
+                'fcm_token': fcmToken
             }),
         );
         final jsonData = json.decode(response.body);
