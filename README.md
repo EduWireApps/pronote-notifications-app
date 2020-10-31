@@ -13,7 +13,6 @@ Notifications pour Pronote est une application mobile qui étend les fonctionnal
 * Envoi de notifications lorsqu'un cours des deux prochaines semaines est annulé
 * Envoi de notifications lorsque la salle d'un cours des deux prochaines semaines est modifiée
 * Ajout d'un bouton `Supprimer mes données`
-* Ajout d'une page `Historique des notifications`
 
 ## Fonctionnement
 
