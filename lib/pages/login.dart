@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pronote_notifications/auth.dart';
+import 'package:pronote_notifications/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pronote_notifications/widgets/dialogs.dart';
 
 class LoginPage extends StatefulWidget {
-	LoginPage({this.auth, this.loginCallback});
+	LoginPage({this.api, this.loginCallback});
 
-	final BaseAuth auth;
+	final BaseAPI api;
 	final Function loginCallback;
 
 	@override
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
 		});
 		if (validateAndSave()) {
 			try {
-				final userData = await widget.auth.register(_username, _password, _pronoteURL);
+				final userData = await widget.api.register(_username, _password, _pronoteURL);
 				print('Signed in: ${userData.fullName}');
 				setState(() {
 					_isLoading = false;
@@ -72,16 +72,16 @@ class _LoginPageState extends State<LoginPage> {
 				if (e is String) {
 					setState(() {
 						_isLoading = false;
-						showErrorDialog(context, title: 'Une erreur est survenue', content: e);
+						showInfoDialog(context, title: 'Une erreur est survenue', content: e);
 					});
 				} else {
-					if (e.message == null) showErrorDialog(context, title: 'Une erreur est survenue', content: 'Quelque chose s\'est mal passé durant la connexion...');
+					if (e.message == null) showInfoDialog(context, title: 'Une erreur est survenue', content: 'Quelque chose s\'est mal passé durant la connexion...');
 					setState(() {
 						_isLoading = false;
 						if (e.message.contains('Unexpected character')) {
-							showErrorDialog(context, title: 'Une erreur est survenue', content: 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
+							showInfoDialog(context, title: 'Une erreur est survenue', content: 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
 						} else {
-							showErrorDialog(context, title: 'Une erreur est survenue', content: e.message);
+							showInfoDialog(context, title: 'Une erreur est survenue', content: e.message);
 						}
 					});
 				}

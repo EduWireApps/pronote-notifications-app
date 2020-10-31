@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/pages/login.dart';
-import 'package:pronote_notifications/auth.dart';
+import 'package:pronote_notifications/api.dart';
 import 'package:pronote_notifications/pages/home.dart';
 import 'package:pronote_notifications/firebase.dart';
 import 'package:pronote_notifications/widgets/dialogs.dart';
@@ -12,9 +12,9 @@ enum AuthStatus {
 }
 
 class RootPage extends StatefulWidget {
-	RootPage({this.auth});
+	RootPage({this.api});
 
-	final BaseAuth auth;
+	final BaseAPI api;
 
 	@override
 	State<StatefulWidget> createState() => new _RootPageState();
@@ -29,14 +29,14 @@ class _RootPageState extends State<RootPage> {
 		super.initState();
     initFirebase();
 
-		widget.auth.isLogged().then((isLogged) {
+		widget.api.isLogged().then((isLogged) {
 			if (!isLogged) {
 				setState(() {
 					authStatus = AuthStatus.NOT_LOGGED_IN;
 				});
 			} else {
         try {
-          widget.auth.login().then((userData) {
+          widget.api.login().then((userData) {
             setState(() {
               _userData = userData;
               authStatus = AuthStatus.LOGGED_IN;
@@ -46,13 +46,13 @@ class _RootPageState extends State<RootPage> {
           print('Error: $e');
           if (e is String) {
             setState(() {
-              showErrorDialog(context, title: 'Une erreur est survenue', content: e);
+              showInfoDialog(context, title: 'Une erreur est survenue', content: e);
             });
           } else {
-            if (e.message == null) showErrorDialog(context, title: 'Une erreur est survenue', content: 'Quelque chose s\'est mal passé durant la connexion...');
+            if (e.message == null) showInfoDialog(context, title: 'Une erreur est survenue', content: 'Quelque chose s\'est mal passé durant la connexion...');
             setState(() {
               if (e.message.contains('Unexpected character')) {
-                showErrorDialog(context, title: 'Une erreur est survenue', content: 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
+                showInfoDialog(context, title: 'Une erreur est survenue', content: 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
               } else {
                 setState(() {
                   authStatus = AuthStatus.NOT_LOGGED_IN;
@@ -96,7 +96,7 @@ class _RootPageState extends State<RootPage> {
 			break;
 		case AuthStatus.NOT_LOGGED_IN:
 			return new LoginPage(
-				auth: widget.auth,
+				api: widget.api,
 				loginCallback: loginCallback,
 			);
 			break;
@@ -104,7 +104,7 @@ class _RootPageState extends State<RootPage> {
 			if (_userData != null) {
 				return new HomePage(
 					userData: _userData,
-					auth: widget.auth,
+					api: widget.api,
 					logoutCallback: logoutCallback,
 				);
 			} else return buildWaitingScreen();

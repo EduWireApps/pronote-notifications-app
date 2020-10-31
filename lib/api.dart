@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pronote_notifications/firebase.dart';
+import 'dart:developer';
 
 class UserData {
 
@@ -19,7 +20,18 @@ class UserData {
     UserData(this.fullName, this.establishment, this.studentClass, this.avatarBase64, this.notificationsHomeworks, this.notificationsMarks);
 }
 
-abstract class BaseAuth {
+class NotificationData {
+
+  String type;
+  String title;
+  bool hasSmallBody;
+  String smallBody;
+  String body;
+
+  NotificationData(this.type, this.title, this.hasSmallBody, this.smallBody, this.body);
+}
+
+abstract class BaseAPI {
 
     // to get login status
     Future<bool> isLogged();
@@ -31,10 +43,12 @@ abstract class BaseAuth {
     Future<void> updateSettings(bool notificationsHomeworks, bool notificationsMarks);
     // to logout
     Future<void> logout();
+    // to get notifications
+    Future<List<dynamic>> getUserNotifications();
 
 }
 
-class Auth implements BaseAuth {
+class API implements BaseAPI {
 
     Future<bool> isLogged() async {
         final sharedPreferences = await SharedPreferences.getInstance();
@@ -117,5 +131,25 @@ class Auth implements BaseAuth {
         );
         sharedPreferences.setBool('logged', false);
         sharedPreferences.setString('jwt', null);
+    }
+
+    Future<List<dynamic>> getUserNotifications() async {
+      final sharedPreferences = await SharedPreferences.getInstance();
+      final token = sharedPreferences.getString('jwt');
+      final response = await http.get(
+          "https://pnotifications.atlanta-bot.fr/notifications",
+          headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': token
+          }
+      );
+      final jsonData = json.decode(response.body);
+      if (!jsonData['success']) {
+          throw (jsonData['message']);
+      } else {
+          return jsonData['notifications'].map((notificationData) => NotificationData(
+            notificationData['type'], notificationData['title'], notificationData['body'].length > 15, notificationData['body'].substring(0, 15)+"...", notificationData['body']
+          )).toList();
+      }
     }
 }

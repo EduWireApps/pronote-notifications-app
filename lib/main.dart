@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pronote_notifications/auth.dart';
+import 'package:pronote_notifications/api.dart';
 import 'package:pronote_notifications/pages/root.dart';
 
 void main() {
@@ -44,6 +44,6 @@ class _MyAppState extends State<MyApp> {
         theme: new ThemeData(
           primarySwatch: colorCustom,
         ),
-        home: new RootPage(auth: new Auth()));
+        home: new RootPage(api: new API()));
   }
 }

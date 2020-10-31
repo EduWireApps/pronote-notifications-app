@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pronote_notifications/auth.dart';
+import 'package:pronote_notifications/api.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:pronote_notifications/pages/notifications.dart';
 
 class HomePage extends StatefulWidget {
-	HomePage({Key key, this.auth, this.userData, this.logoutCallback})
+	HomePage({Key key, this.api, this.userData, this.logoutCallback})
 		: super(key: key);
 
-	final BaseAuth auth;
+	final BaseAPI api;
 	final VoidCallback logoutCallback;
 	final UserData userData;
 
@@ -16,7 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-	//bool _isEmailVerified = false;
 	bool notificationsHomeworks;
 	bool notificationsMarks;
 
@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
 		super.initState();
 		notificationsHomeworks = widget.userData.notificationsHomeworks;
 		notificationsMarks = widget.userData.notificationsMarks;
-		//_checkEmailVerification();
 	}
 
 	@override
@@ -65,7 +64,7 @@ class _HomePageState extends State<HomePage> {
 											setState(() {
 												notificationsHomeworks = value;
 											});
-											await widget.auth.updateSettings(notificationsHomeworks, notificationsMarks);
+											await widget.api.updateSettings(notificationsHomeworks, notificationsMarks);
 										},
 									),
 									SettingsTile.switchTile(
@@ -76,9 +75,20 @@ class _HomePageState extends State<HomePage> {
 											setState(() {
 											  notificationsMarks = value;
 											});
-											await widget.auth.updateSettings(notificationsHomeworks, notificationsMarks);
+											await widget.api.updateSettings(notificationsHomeworks, notificationsMarks);
 										},
 										enabled: true
+									),
+                  SettingsTile(
+										title: 'Historique des notifications',
+										leading: Icon(Icons.history),
+										enabled: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NotificationPage(api: widget.api)),
+                      );
+                    },
 									),
 								],
 							),
@@ -112,7 +122,7 @@ class _HomePageState extends State<HomePage> {
 
 	logout() async {
 		try {
-			await widget.auth.logout();
+			await widget.api.logout();
 			widget.logoutCallback();
 			_loggingOut = false;
 		} catch (e) {

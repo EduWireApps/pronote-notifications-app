@@ -26,7 +26,6 @@ flutter_icons:
   ios: true
   image_path: "assets/launcher-icon.png"
 
-
   cupertino_icons: ^0.1.3
 
 dev_dependencies:
@@ -45,3 +44,4 @@ flutter:
   assets:
     - url-pronote.png
     - launcher-icon.png
+    - bell.png
