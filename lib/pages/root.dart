@@ -27,7 +27,7 @@ class _RootPageState extends State<RootPage> {
 	@override
 	void initState() {
 		super.initState();
-    initFirebase();
+		initFirebase();
 
 		widget.api.isLogged().then((isLogged) {
 			if (!isLogged) {
@@ -35,35 +35,35 @@ class _RootPageState extends State<RootPage> {
 					authStatus = AuthStatus.NOT_LOGGED_IN;
 				});
 			} else {
-        try {
-          widget.api.login().then((userData) {
-            setState(() {
-              _userData = userData;
-              authStatus = AuthStatus.LOGGED_IN;
-            });
-          });
-        } catch (e) {
-          print('Error: $e');
-          if (e is String) {
-            setState(() {
-              showInfoDialog(context, title: 'Une erreur est survenue', content: e);
-            });
-          } else {
-            if (e.message == null) showInfoDialog(context, title: 'Une erreur est survenue', content: 'Quelque chose s\'est mal passé durant la connexion...');
-            setState(() {
-              if (e.message.contains('Unexpected character')) {
-                showInfoDialog(context, title: 'Une erreur est survenue', content: 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
-              } else {
-                setState(() {
-                  authStatus = AuthStatus.NOT_LOGGED_IN;
-                });
-              }
-            });
-				  }
-        }
+				try {
+					widget.api.login().then((userData) {
+						setState(() {
+							_userData = userData;
+							authStatus = AuthStatus.LOGGED_IN;
+						});
+					});
+				} catch (e) {
+					print('Error: $e');
+					if (e is String) {
+						setState(() {
+							showInfoDialog(context, title: 'Une erreur est survenue', content: e);
+						});
+					} else {
+						if (e.message == null) showInfoDialog(context, title: 'Une erreur est survenue', content: 'Quelque chose s\'est mal passé durant la connexion...');
+						setState(() {
+							if (e.message.contains('Unexpected character')) {
+								showInfoDialog(context, title: 'Une erreur est survenue', content: 'Le serveur de Notifications pour Pronote est actuellement injoignable. Merci de patienter puis réessayez !');
+							} else {
+								setState(() {
+									authStatus = AuthStatus.NOT_LOGGED_IN;
+								});
+							}
+						});
+					}
+				}
 			}
 		});
-  	}
+	}
 
 	void loginCallback(UserData userData) {
 			setState(() {

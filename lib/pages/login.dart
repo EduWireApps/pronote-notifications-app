@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
 		super.initState();
 
 		setState(() {
-		  _isLoading = false;
+      _isLoading = false;
 		});
 
 		SharedPreferences.getInstance().then((instance) {

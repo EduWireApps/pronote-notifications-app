@@ -73,22 +73,22 @@ class _HomePageState extends State<HomePage> {
 										switchValue: notificationsMarks,
 										onToggle: (bool value) async {
 											setState(() {
-											  notificationsMarks = value;
+												notificationsMarks = value;
 											});
 											await widget.api.updateSettings(notificationsHomeworks, notificationsMarks);
 										},
 										enabled: true
 									),
-                  SettingsTile(
+									SettingsTile(
 										title: 'Historique des notifications',
 										leading: Icon(Icons.history),
 										enabled: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => NotificationPage(api: widget.api)),
-                      );
-                    },
+										onTap: () {
+											Navigator.push(
+												context,
+												MaterialPageRoute(builder: (context) => NotificationPage(api: widget.api)),
+												);
+										},
 									),
 								],
 							),
@@ -130,13 +130,13 @@ class _HomePageState extends State<HomePage> {
 		}
 	}
 
-  Widget showTodoList() {
-      return Center(
-        child: Text(
-            'Welcome. Your name is ${widget.userData.fullName}',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30.0),
-        )
-      );
-  }
+	Widget showTodoList() {
+		return Center(
+			child: Text(
+				'Welcome. Your name is ${widget.userData.fullName}',
+				textAlign: TextAlign.center,
+				style: TextStyle(fontSize: 30.0),
+			)
+		);
+	}
 }
