@@ -147,7 +147,7 @@ class API implements BaseAPI {
 			throw (jsonData['message']);
 		} else {
 			return jsonData['notifications'].map((notificationData) => NotificationData(
-				notificationData['type'], notificationData['title'], notificationData['body'].length > 15, notificationData['body'].substring(0, 15)+"...", notificationData['body']
+				notificationData['type'], notificationData['title'], notificationData['body'].length > 30, notificationData['body'].length > 30 ?  notificationData['body'].substring(0, 30)+"..." : null, notificationData['body']
 			)).toList();
 		}
 	}
