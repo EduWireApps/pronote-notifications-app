@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/api.dart';
 import 'package:pronote_notifications/pages/root.dart';
@@ -37,6 +38,12 @@ class _MyAppState extends State<MyApp> {
 
 	@override
 	Widget build(BuildContext context) {
+    
+        SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown
+        ]);
+
 		return new MaterialApp(
 			title: 'Notifications pour Pronote ',
 			debugShowCheckedModeBanner: false,
