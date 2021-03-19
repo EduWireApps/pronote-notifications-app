@@ -263,8 +263,6 @@ class _LoginPageState extends State<LoginPage> {
 				),
 				validator: (value) {
 					String message;
-					RegExp url = RegExp(r'(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w-]*)*\/?\??([^#\n\r]*)?#?([^\n\r]*)');
-					if(!url.hasMatch(value)) message = 'Veuillez préciser une URL valide';
 					if(value.isEmpty) message = 'L\'URL Pronote ne peut pas être vide';
 					return message;
 				},
