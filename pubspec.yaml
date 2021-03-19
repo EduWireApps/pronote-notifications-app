@@ -3,10 +3,10 @@ description: Notifications pour Pronote
 
 publish_to: 'none'
 
-version: 0.0.1+2
+version: 0.0.2
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
