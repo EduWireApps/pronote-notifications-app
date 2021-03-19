@@ -6,13 +6,13 @@ import 'package:pronote_notifications/firebase.dart';
 
 class UserData {
 
-  	// informations
+  // informations
 	String fullName;
 	String studentClass;
 	String avatarBase64;
 	String establishment;
 
-  	// settings
+  // settings
 	bool notificationsHomeworks;
 	bool notificationsMarks;
 	
@@ -32,11 +32,11 @@ class NotificationData {
 
 abstract class BaseAPI {
 
-  	// to get login status
+  // to get login status
 	Future<bool> isLogged();
 	// to register at the beginning
 	Future<UserData> register(String username, String password, String pronoteURL);
-    // to login and get informations about the current user
+  // to login and get informations about the current user
 	Future<UserData> login();
 	// to update settings
 	Future<void> updateSettings(bool notificationsHomeworks, bool notificationsMarks);
