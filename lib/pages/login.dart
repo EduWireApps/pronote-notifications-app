@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String _geolocationErrorMessage;
   bool _useGeolocation = true;
+  String _selectedEstablishment;
   bool _establishmentsLoaded = false;
   List<dynamic> _establishments;
 
@@ -266,9 +267,10 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             margin: const EdgeInsets.only(left: 20.0, right: 20.0),
             child: DropdownButton<String>(
-            value: _establishments[0].name,
+            value: _selectedEstablishment ?? _establishments[0].name,
             onChanged: (String newValue) {
               setState(() {
+                _selectedEstablishment = newValue;
                 _pronoteURL = _establishments.firstWhere((es) => es.name == newValue).url;
               });
             },
