@@ -43,13 +43,11 @@ class _HomePageState extends State<HomePage> {
 								tiles: [
 									SettingsTile(
 										title: widget.userData.fullName,
-										leading: Icon(Icons.account_circle),
-										onTap: () {}
+										leading: Icon(Icons.account_circle)
 									),
 									SettingsTile(
 										title: "${widget.userData.establishment} (${widget.userData.studentClass})",
-										leading: Icon(Icons.school),
-										onTap: () {}
+										leading: Icon(Icons.school)
 									),
 								],
 							),
@@ -83,11 +81,11 @@ class _HomePageState extends State<HomePage> {
 										title: 'Historique des notifications',
 										leading: Icon(Icons.history),
 										enabled: true,
-										onTap: () {
+										onPressed: (BuildContext context) {
 											Navigator.push(
 												context,
 												MaterialPageRoute(builder: (context) => NotificationPage(api: widget.api)),
-												);
+                      );
 										},
 									),
 								],
@@ -105,7 +103,7 @@ class _HomePageState extends State<HomePage> {
 													strokeWidth: 2.0
 											),
 										) : Icon(Icons.exit_to_app),
-										onTap: () {
+										onPressed: (BuildContext context) {
 											setState(() {
 												_loggingOut = true;
 											});

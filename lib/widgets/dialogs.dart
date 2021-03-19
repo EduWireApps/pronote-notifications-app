@@ -7,16 +7,16 @@ void showInfoDialog(BuildContext context, { String title, String content }) {
 			return AlertDialog(
 				title: new Text(title),
 				content:
-					new Text(content),
-				actions: <Widget>[
-					new FlatButton(
-						child: new Text("Fermer"),
-						onPressed: () {
-						Navigator.of(context).pop();
-						},
-					)
-				]
-			);
+        new Text(content),
+        actions: <Widget>[
+          new ElevatedButton(
+            child: new Text("Fermer"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ]
+      );
 		},
 	);
 }

@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
 					),
 					actions: <Widget>[
 						// usually buttons at the bottom of the dialog
-						new FlatButton(
+						new TextButton(
 							child: new Text("J'ai compris !"),
 							onPressed: () {
 								Navigator.pop(context, true);
@@ -276,12 +276,14 @@ class _LoginPageState extends State<LoginPage> {
 			padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
 			child: SizedBox(
 				height: 40.0,
-				child: new RaisedButton(
-					elevation: 5.0,
-					shape: new RoundedRectangleBorder(
-						borderRadius: new BorderRadius.circular(30.0)
+				child: new ElevatedButton(
+					style: ElevatedButton.styleFrom(
+						primary: Color(0xff29826c),
+						elevation: 5.0,
+						shape: new RoundedRectangleBorder(
+							borderRadius: new BorderRadius.circular(30.0)
+						)
 					),
-					color: Color(0xff29826c),
 					child: _isLoading ? new LinearProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(41, 170, 108, 1))) : new Text('Connexion',
 						style: new TextStyle(fontSize: 20.0, color: Colors.white),
 					),
