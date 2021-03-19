@@ -58,7 +58,7 @@ class API implements BaseAPI {
 	Future<UserData> register(String username, String password, String pronoteURL) async {
 		final fcmToken = await getDeviceToken();
 		final response = await http.post(
-			"https://pnotifications.atlanta-bot.fr/register",
+			Uri.https("https://pnotifications.atlanta-bot.fr", "register"),
 			headers: <String, String>{
 				'Content-Type': 'application/json; charset=UTF-8',
 			},
@@ -87,7 +87,7 @@ class API implements BaseAPI {
 		final sharedPreferences = await SharedPreferences.getInstance();
 		final token = sharedPreferences.getString('jwt');
 		final response = await http.get(
-			"https://pnotifications.atlanta-bot.fr/login",
+			Uri.https("https://pnotifications.atlanta-bot.fr", "login"),
 			headers: <String, String>{
 				'Content-Type': 'application/json; charset=UTF-8',
 				'Authorization': token
@@ -105,7 +105,7 @@ class API implements BaseAPI {
 		final sharedPreferences = await SharedPreferences.getInstance();
 		final token = sharedPreferences.getString('jwt');
 		await http.post(
-			"https://pnotifications.atlanta-bot.fr/settings",
+			Uri.https("https://pnotifications.atlanta-bot.fr", "settings"),
 			headers: <String, String>{
 				'Content-Type': 'application/json; charset=UTF-8',
 				'Authorization': token
@@ -122,21 +122,21 @@ class API implements BaseAPI {
 		final sharedPreferences = await SharedPreferences.getInstance();
 		final token = sharedPreferences.getString('jwt');
 		await http.post(
-			"https://pnotifications.atlanta-bot.fr/logout",
+			Uri.https("https://pnotifications.atlanta-bot.fr", "logout"),
 			headers: <String, String>{
 				'Content-Type': 'application/json; charset=UTF-8',
 				'Authorization': token
 			}
 		);
 		sharedPreferences.setBool('logged', false);
-		sharedPreferences.setString('jwt', null);
+		sharedPreferences.remove('jwt');
 	}
 
 	Future<List<dynamic>> getUserNotifications() async {
 		final sharedPreferences = await SharedPreferences.getInstance();
 		final token = sharedPreferences.getString('jwt');
 		final response = await http.get(
-			"https://pnotifications.atlanta-bot.fr/notifications",
+			Uri.https("https://pnotifications.atlanta-bot.fr", "notifications"),
 			headers: <String, String>{
 				'Content-Type': 'application/json; charset=UTF-8',
 				'Authorization': token
