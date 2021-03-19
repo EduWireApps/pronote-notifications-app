@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pronote_notifications/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pronote_notifications/widgets/dialogs.dart';
+import 'package:geolocator/geolocator.dart';
 
 class LoginPage extends StatefulWidget {
 	LoginPage({this.api, this.loginCallback});
@@ -20,9 +21,13 @@ class _LoginPageState extends State<LoginPage> {
 	String _password;
 	String _pronoteURL;
 
+  String _pronoteURLInfoText = 'Sélectionnez votre établissement';
+
+  bool _establishmentsLoaded = false;
+  List<dynamic> _establishments;
+
 	bool _isLoading;
 	final _usernameController = TextEditingController();
-	final _pronoteURLController = TextEditingController();
 
 	@override
 	void initState () {
@@ -38,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
 				if (username != null && pronoteURL != null) {
 					setState(() {
 						_usernameController.text = username;
-						_pronoteURLController.text = pronoteURL;
 					});
 				}
 		});
@@ -238,36 +242,119 @@ class _LoginPageState extends State<LoginPage> {
 					icon: new Icon(
 					Icons.lock,
 					color: Colors.grey,
-					)),
+        )),
 				validator: (value) => value.isEmpty ? 'Le mot de passe ne peut pas être vide' : null,
 				onSaved: (value) => _password = value.trim(),
 			),
 		);
 	}
 
+  Future<Position> _determinePosition() async {
+      bool serviceEnabled;
+      LocationPermission permission;
+
+      // Test if location services are enabled.
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        // Location services are not enabled don't continue
+        // accessing the position and request users of the 
+        // App to enable the location services.
+        return Future.error('Location services are disabled.');
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+          permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.deniedForever) {
+          // Permissions are denied forever, handle appropriately. 
+          return Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
+        } 
+
+        if (permission == LocationPermission.denied) {
+          // Permissions are denied, next time you could try
+          // requesting permissions again (this is also where
+          // Android's shouldShowRequestPermissionRationale 
+          // returned true. According to Android guidelines
+          // your App should show an explanatory UI now.
+          return Future.error(
+              'Location permissions are denied');
+        }
+      }
+
+      // When we reach here, permissions are granted and we can
+      // continue accessing the position of the device.
+      return await Geolocator.getCurrentPosition();
+  }
+
 	Widget showPronoteURL() {
 		return Padding(
 			padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-			child: new TextFormField(
-				readOnly: _isLoading,
-				maxLines: 1,
-				keyboardType: TextInputType.url,
-				autofocus: false,
-				controller: _pronoteURLController,
-				decoration: new InputDecoration(
-					hintText: 'URL Pronote',
-					icon: new Icon(
-						Icons.http,
-						color: Colors.grey,
-					)
-				),
-				validator: (value) {
-					String message;
-					if(value.isEmpty) message = 'L\'URL Pronote ne peut pas être vide';
-					return message;
-				},
-				onSaved: (value) => _pronoteURL = value.trim(),
-			),
+			child: _establishmentsLoaded ? Row(
+        children: [
+          Container(
+            child: new Icon(
+              Icons.school,
+              color: Colors.grey,
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: DropdownButton<String>(
+            value: _establishments[0].name,
+            onChanged: (String newValue) {
+              setState(() {
+                _pronoteURL = _establishments.firstWhere((es) => es.name == newValue).url;
+              });
+            },
+            items: (_establishments.map((e) => e.name.toString()).toList()).map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ))
+      ]) :
+      new TextFormField(
+        readOnly: true,
+        maxLines: 1,
+        obscureText: true,
+        autofocus: false,
+        initialValue: _password ?? null,
+        decoration: new InputDecoration(
+          hintText: _pronoteURLInfoText,
+          icon: new Icon(
+          Icons.school,
+          color: Colors.grey,
+        )),
+        validator: (value) => value.isEmpty ? 'Le mot de passe ne peut pas être vide' : null,
+        onSaved: (value) => _password = value.trim(),
+        onTap: () {
+          _determinePosition().then((value) async {
+            setState(() {
+              _pronoteURLInfoText = 'Chargement des étab. à proximité...';            
+            });
+            print('Getting establishments...');
+            final establishments = await widget.api.getEstablishments(value.latitude, value.longitude);
+            print('Got establishments');
+            setState(() {
+              _establishments = establishments;
+              _establishmentsLoaded = true;
+            });
+          }, onError: (e) {
+            print(e);
+            if (e == 'Location services are disabled.') {
+              _pronoteURLInfoText = 'Veuillez activer la géolocalisation !';
+            } else if (e == 'Location permissions are permanently denied, we cannot request permissions.') {
+              _pronoteURLInfoText = 'Impossible d\'accéder à la géolocalisation';
+            } else if (e == 'Location permissions are denied') {
+              _pronoteURLInfoText = 'Autorisez la géolocalisation (ou rentrez une URL manuellement)';
+            } else {
+              _pronoteURLInfoText = 'Une erreur s\'est produite.';
+            }
+          });
+        },
+      )
 		);
 	}
 

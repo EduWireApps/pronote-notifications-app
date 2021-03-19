@@ -30,6 +30,14 @@ class NotificationData {
 	NotificationData(this.type, this.title, this.hasSmallBody, this.smallBody, this.body);
 }
 
+class EstablishmentData {
+
+  String name;
+  String url;
+
+  EstablishmentData(this.name, this.url);
+}
+
 abstract class BaseAPI {
 
   // to get login status
@@ -44,6 +52,8 @@ abstract class BaseAPI {
 	Future<void> logout();
 	// to get notifications
 	Future<List<dynamic>> getUserNotifications();
+  // to get establishments nxt door
+  Future<List<dynamic>> getEstablishments(double latitude, double longitude);
 
 }
 
@@ -151,4 +161,21 @@ class API implements BaseAPI {
 			)).toList();
 		}
 	}
+
+  Future<List<dynamic>> getEstablishments(latitude, longitude) async {
+    final response = await http.get(
+      Uri.https('pnotifications.atlanta-bot.fr', 'establishments', {
+        'latitude': latitude.toString(),
+        'longitude': longitude.toString()
+      })
+    );
+    final jsonData = json.decode(response.body);
+    if (!jsonData['success']) {
+      throw (jsonData['message']);
+    } else {
+      return jsonData['establishments'].map((establishmentData) => EstablishmentData(
+        establishmentData['nomEtab'], establishmentData['url']
+      )).toList();
+    }
+  }
 }
