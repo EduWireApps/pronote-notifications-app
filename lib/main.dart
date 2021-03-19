@@ -39,10 +39,10 @@ class _MyAppState extends State<MyApp> {
 	@override
 	Widget build(BuildContext context) {
     
-        SystemChrome.setPreferredOrientations([
-            DeviceOrientation.portraitUp,
-            DeviceOrientation.portraitDown
-        ]);
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown
+    ]);
 
 		return new MaterialApp(
 			title: 'Notifications pour Pronote ',
