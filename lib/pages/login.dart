@@ -17,12 +17,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 	final _formKey = new GlobalKey<FormState>();
 
+  // used to store credentials before sending them to the server
 	String _username;
 	String _password;
 	String _pronoteURL;
 
   String _pronoteURLInfoText = 'Sélectionnez votre établissement';
 
+  String _geolocationErrorMessage;
+  bool _useGeolocation = true;
   bool _establishmentsLoaded = false;
   List<dynamic> _establishments;
 
@@ -114,51 +117,24 @@ class _LoginPageState extends State<LoginPage> {
 			));
   }
 
-	void _showDialog() {
-		// flutter defined function
-		showDialog(
-			context: context,
-			builder: (BuildContext context) {
-				// return object of type Dialog
-				return AlertDialog(
-					title: new Text("Comment récupérer l'URL Pronote ?"),
-					content: Wrap(
-						children: [
-							new Text('Cette URL est présente en haut de votre navigateur lorsque vous êtes connecté sur Pronote. Cette URL doit ressembler à https://0310047h.index-education.net/pronote/. Attention, ce n\'est pas l\'URL de l\'ENT mais bien celle de Pronote !\n'),
-							new Image(image: AssetImage('url-pronote.png'))
-						],
-					),
-					actions: <Widget>[
-						// usually buttons at the bottom of the dialog
-						new TextButton(
-							child: new Text("J'ai compris !"),
-							onPressed: () {
-								Navigator.pop(context, true);
-							},
-						),
-					],
-				);
-			},
-		);
-	}
-
   Widget _showForm() {
     return new Container(
-        padding: EdgeInsets.all(16.0),
-        child: new Form(
-			key: _formKey,
-			child: new ListView(
-				shrinkWrap: true,
-				children: <Widget>[
-					showLogo(),
-					showDescription(),
-					showUsernameInput(),
-					showPasswordInput(),
-					showPronoteURL(),
-					showLoginButton(),
-				],
-			),
-		));
+      padding: EdgeInsets.all(16.0),
+      child: new Form(
+        key: _formKey,
+        child: new ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            showLogo(),
+            showDescription(),
+            showUsernameInput(),
+            showPasswordInput(),
+            showPronoteURL(),
+            showLoginButton(),
+          ],
+        ),
+      )
+    );
   }
 
 	Widget showLogo() {
@@ -189,15 +165,10 @@ class _LoginPageState extends State<LoginPage> {
 									style: TextStyle(fontSize: 15, color: Colors.black),
 									textAlign: TextAlign.center
 							),
-							new GestureDetector(
-									onTap: () {
-											_showDialog();
-									},
-									child: const Text('Qu\'est-ce que "URL Pronote" ?',
-										style: TextStyle(fontSize: 15, color: Colors.black, decoration: TextDecoration.underline),
-										textAlign: TextAlign.center
-									)
-							),
+              if (_geolocationErrorMessage != null) Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Text(_geolocationErrorMessage, style: TextStyle(color: Colors.red, fontSize: 14))
+              )
 						],
 					),
 				),
@@ -272,13 +243,7 @@ class _LoginPageState extends State<LoginPage> {
         } 
 
         if (permission == LocationPermission.denied) {
-          // Permissions are denied, next time you could try
-          // requesting permissions again (this is also where
-          // Android's shouldShowRequestPermissionRationale 
-          // returned true. According to Android guidelines
-          // your App should show an explanatory UI now.
-          return Future.error(
-              'Location permissions are denied');
+          return Future.error('Location permissions are denied');
         }
       }
 
@@ -332,26 +297,19 @@ class _LoginPageState extends State<LoginPage> {
         onTap: () {
           _determinePosition().then((value) async {
             setState(() {
+              _geolocationErrorMessage = null;
               _pronoteURLInfoText = 'Chargement des étab. à proximité...';            
             });
-            print('Getting establishments...');
             final establishments = await widget.api.getEstablishments(value.latitude, value.longitude);
-            print('Got establishments');
             setState(() {
               _establishments = establishments;
               _establishmentsLoaded = true;
             });
           }, onError: (e) {
             print(e);
-            if (e == 'Location services are disabled.') {
-              _pronoteURLInfoText = 'Veuillez activer la géolocalisation !';
-            } else if (e == 'Location permissions are permanently denied, we cannot request permissions.') {
-              _pronoteURLInfoText = 'Impossible d\'accéder à la géolocalisation';
-            } else if (e == 'Location permissions are denied') {
-              _pronoteURLInfoText = 'Autorisez la géolocalisation (ou rentrez une URL manuellement)';
-            } else {
-              _pronoteURLInfoText = 'Une erreur s\'est produite.';
-            }
+            setState(() {
+              _geolocationErrorMessage = 'La géolocalisation est nécessaire pour déterminer les établissements prêts de chez vous ! Vous pouvez aussi entrer l\'URL Pronote manuellement.';       
+            });
           });
         },
       )
@@ -360,7 +318,7 @@ class _LoginPageState extends State<LoginPage> {
 
 	Widget showLoginButton() {
 		return new Padding(
-			padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+			padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 30.0),
 			child: SizedBox(
 				height: 40.0,
 				child: new ElevatedButton(
