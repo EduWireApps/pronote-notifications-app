@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/api.dart';
-import 'package:pronote_notifications/url.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:pronote_notifications/pages/notifications.dart';
 import 'package:pronote_notifications/widgets/dialogs.dart';
-import 'package:pronote_notifications/reviews.dart';
 import 'package:in_app_review/in_app_review.dart';
 
 final InAppReview inAppReview = InAppReview.instance;
