@@ -34,8 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
             appBar: new AppBar(
               title: new Text('Notifications pour Pronote'),
               actions: <Widget>[
@@ -138,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 )
               ],
-            )));
+            ));
   }
 
   logout() async {
