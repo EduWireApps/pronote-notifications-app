@@ -365,14 +365,14 @@ class _LoginPageState extends State<LoginPage> {
                     margin: const EdgeInsets.only(left: 20.0, right: 20.0),
                     child: DropdownButton<String>(
                       value: _selectedEstablishment ?? _establishments[0].name,
-                      onChanged: (String newValue) {
+                      onChanged: !_isLoading ? (String newValue) {
                         setState(() {
                           _selectedEstablishment = newValue;
                           _pronoteURL = _establishments
                               .firstWhere((es) => es.name == newValue)
                               .url;
                         });
-                      },
+                      } : null,
                       items: (_establishments
                               .map((e) => e.name.toString())
                               .toList())
