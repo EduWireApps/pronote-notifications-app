@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pronote_notifications/api.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:pronote_notifications/pages/notifications.dart';
+import 'package:pronote_notifications/widgets/dialogs.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.api, this.userData, this.logoutCallback})
@@ -34,6 +35,23 @@ class _HomePageState extends State<HomePage> {
         child: Scaffold(
             appBar: new AppBar(
               title: new Text('Notifications pour Pronote'),
+              actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: (String value) {
+                if (value == 'À propos') {
+                  showAboutAppDialog(context);
+                }
+              },
+              itemBuilder: (BuildContext context){
+                return ['Donnez votre avis', 'À propos'].map((String choice){
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            )
+          ],
             ),
             body: SettingsList(
               sections: [
