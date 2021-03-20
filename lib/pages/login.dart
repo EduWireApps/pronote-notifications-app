@@ -189,6 +189,7 @@ class _LoginPageState extends State<LoginPage> {
               showPasswordInput(),
               if (_useGeolocation) showPronoteEstablishmentsDropdown(),
               if (!_useGeolocation) showPronoteURL(),
+              if (!_useGeolocation) Container(child: Text('(exemple: https://0314700h.index-education.net)', style: TextStyle(color: Color.fromRGBO(0, 0, 0, .6))), margin: const EdgeInsets.only(top: 10)),
               showSwitchMethod(),
               showLoginButton(),
             ],
@@ -227,6 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                     margin: const EdgeInsets.only(top: 10),
                     child: Text(_geolocationErrorMessage,
+                        textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.red, fontSize: 14)))
             ],
           ),
@@ -319,10 +321,10 @@ class _LoginPageState extends State<LoginPage> {
             margin: const EdgeInsets.only(top: 10, bottom: 10),
             child: Text(
                 _useGeolocation
-                    ? 'ou entrez une URL personnalisée'
-                    : 'ou chercher établissements à proximité',
+                    ? 'ou entrez une URL Pronote manuellement'
+                    : 'ou chercher automatiquement les établissements à proximité',
                 style: TextStyle(
-                    color: Colors.blue,
+                    color: Color.fromRGBO(41, 130, 108, .8),
                     decoration: TextDecoration.underline))));
   }
 
@@ -414,9 +416,9 @@ class _LoginPageState extends State<LoginPage> {
                     print(e);
                     setState(() {
                       _pronoteURLInfoText =
-                          'Accès à la géolocalisation impossible !';
+                          'Sélectionnez votre établissement';
                       _geolocationErrorMessage =
-                          'La géolocalisation est nécessaire pour déterminer les établissements prêts de chez vous ! Vous pouvez aussi entrer l\'URL Pronote manuellement.';
+                          'Pour faciliter la connexion, l\'application peut trouver pour vous tous les établissements à proximité (géolocalisation requise). Sinon, vous pouvez entrer manuellement votre URL Pronote.';
                     });
                   });
                 },
