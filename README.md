@@ -23,6 +23,12 @@ Le code est entièrement open source :
 * [repository de l'application mobile](https://github.com/pronote-notifications/pronote-notifications-app)
 * [repository de l'API de l'application](https://github.com/pronote-notifications/pronote-notifications-api)
 
+## Build
+
+* Installer le SDK flutter.
+* Construire l'application : `flutter build apk --split-per-abi --no-sound-null-safety`.
+* Tester l'application : `flutter run`.
+
 ### Made with
 
 <code><img height="20" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/flutter/flutter.png"></code> **Flutter** (front-end)  
