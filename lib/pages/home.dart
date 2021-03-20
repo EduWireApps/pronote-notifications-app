@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/api.dart';
+import 'package:pronote_notifications/url.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:pronote_notifications/pages/notifications.dart';
 import 'package:pronote_notifications/widgets/dialogs.dart';
+import 'package:pronote_notifications/reviews.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.api, this.userData, this.logoutCallback})
@@ -37,13 +39,16 @@ class _HomePageState extends State<HomePage> {
               title: new Text('Notifications pour Pronote'),
               actions: <Widget>[
             PopupMenuButton<String>(
-              onSelected: (String value) {
+              onSelected: (String value) async {
                 if (value == 'À propos') {
                   showAboutAppDialog(context);
+                } else {
+                  final reviewAsked = await askForReview();
+                  if (!reviewAsked) launchURL('https://play.google.com/store/apps/details?id=com.androz2091.pronote_notifications');
                 }
               },
               itemBuilder: (BuildContext context){
-                return ['Donnez votre avis', 'À propos'].map((String choice){
+                return ['Laisser un avis', 'À propos'].map((String choice){
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Text(choice),
@@ -129,9 +134,9 @@ class _HomePageState extends State<HomePage> {
                         });
                         logout();
                       },
-                    ),
+                    )
                   ],
-                ),
+                )
               ],
             )));
   }
