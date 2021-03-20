@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                       title: 'Historique des notifications',
                       leading: Icon(Icons.history),
                       enabled: true,
-                      onPressed: (BuildContext context) {
+                      onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                                   CircularProgressIndicator(strokeWidth: 2.0),
                             )
                           : Icon(Icons.exit_to_app),
-                      onPressed: (BuildContext context) {
+                      onTap: () {
                         setState(() {
                           _loggingOut = true;
                         });
