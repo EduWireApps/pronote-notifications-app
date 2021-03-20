@@ -31,6 +31,8 @@ class _LoginPageState extends State<LoginPage> {
   List<dynamic> _establishments;
 
 	bool _isLoading;
+  final _pronoteGeoController = TextEditingController();
+  final _pronoteURLController = TextEditingController();
 	final _usernameController = TextEditingController();
 
 	@override
@@ -47,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
 				if (username != null && pronoteURL != null) {
 					setState(() {
 						_usernameController.text = username;
+            _pronoteURLController.text = pronoteURL;
 					});
 				}
 		});
@@ -130,7 +133,9 @@ class _LoginPageState extends State<LoginPage> {
             showDescription(),
             showUsernameInput(),
             showPasswordInput(),
-            showPronoteURL(),
+            if (_useGeolocation) showPronoteEstablishmentsDropdown(),
+            if (!_useGeolocation) showPronoteURL(),
+            showSwitchMethod(),
             showLoginButton(),
           ],
         ),
@@ -242,7 +247,52 @@ class _LoginPageState extends State<LoginPage> {
       return await Geolocator.getCurrentPosition();
   }
 
-	Widget showPronoteURL() {
+  Widget showSwitchMethod () {
+    return InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: () {
+          setState(() {
+            _useGeolocation = !_useGeolocation;
+            if (!_useGeolocation) {
+              _pronoteGeoController.text = null;
+            }
+          });
+        },
+        child: Container(
+          margin: const EdgeInsets.only(top: 10, bottom: 10),
+          child: Text(_useGeolocation ? 'ou entrez une URL personnalisée' : 'ou chercher établissements à proximité', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline))
+        )
+    );
+  }
+
+  Widget showPronoteURL() {
+		return Padding(
+			padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+			child: new TextFormField(
+				readOnly: _isLoading,
+				maxLines: 1,
+				keyboardType: TextInputType.url,
+				autofocus: false,
+				controller: _pronoteURLController,
+				decoration: new InputDecoration(
+					hintText: 'URL Pronote',
+					icon: new Icon(
+						Icons.http,
+						color: Colors.grey,
+					)
+				),
+				validator: (value) {
+					String message;
+					if(value.isEmpty) message = 'L\'URL Pronote ne peut pas être vide';
+					return message;
+				},
+				onSaved: (value) => _pronoteURL = value.trim(),
+      )
+    );
+  }
+
+	Widget showPronoteEstablishmentsDropdown () {
 		return Padding(
 			padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
 			child: _establishmentsLoaded ? Row(
@@ -274,17 +324,15 @@ class _LoginPageState extends State<LoginPage> {
       new TextFormField(
         readOnly: true,
         maxLines: 1,
-        obscureText: true,
         autofocus: false,
-        initialValue: _password ?? null,
+        controller: _pronoteGeoController,
         decoration: new InputDecoration(
           hintText: _pronoteURLInfoText,
           icon: new Icon(
           Icons.school,
           color: Colors.grey,
         )),
-        validator: (value) => value.isEmpty ? 'Veuillez sélectionner un établissement' : null,
-        onSaved: (value) => _password = value.trim(),
+        validator: (value) => 'Veuillez sélectionner un établissement',
         onTap: () {
           setState(() {
               _geolocationErrorMessage = null;
