@@ -5,6 +5,9 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:pronote_notifications/pages/notifications.dart';
 import 'package:pronote_notifications/widgets/dialogs.dart';
 import 'package:pronote_notifications/reviews.dart';
+import 'package:in_app_review/in_app_review.dart';
+
+final InAppReview inAppReview = InAppReview.instance;
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.api, this.userData, this.logoutCallback})
@@ -43,8 +46,7 @@ class _HomePageState extends State<HomePage> {
                 if (value == 'À propos') {
                   showAboutAppDialog(context);
                 } else {
-                  final reviewAsked = await askForReview();
-                  if (!reviewAsked) launchURL('https://play.google.com/store/apps/details?id=com.androz2091.pronote_notifications');
+                  inAppReview.openStoreListing();
                 }
               },
               itemBuilder: (BuildContext context){
