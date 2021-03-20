@@ -3,45 +3,48 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-final initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
+final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+    new FlutterLocalNotificationsPlugin();
+final initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/launcher_icon');
 final initializationSettingsIOS = IOSInitializationSettings();
-final initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+final initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
 bool _initialized = false;
 
-void initFirebase()
-{
-	if (_initialized) {
-		return;
-	}
+void initFirebase() {
+  if (_initialized) {
+    return;
+  }
 
   Firebase.initializeApp();
 
-	_flutterLocalNotificationsPlugin.initialize(initializationSettings);
-	_initialized = true;
+  _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  _initialized = true;
 
-	FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("message received from Firebase Messaging");
     if (message.data['type'] != null) showNotification(message);
   });
 }
 
 showNotification(RemoteMessage notificationData) async {
-    final title = notificationData.notification.title;
-    final body = notificationData.notification.body;
-    final android = new AndroidNotificationDetails(title, title, title, styleInformation: BigTextStyleInformation(''));
-    final iOS = new IOSNotificationDetails();
-    final platform = new NotificationDetails(android: android, iOS: iOS);
-    await _flutterLocalNotificationsPlugin.show(0, title, body, platform);
+  final title = notificationData.notification.title;
+  final body = notificationData.notification.body;
+  final android = new AndroidNotificationDetails(title, title, title,
+      styleInformation: BigTextStyleInformation(''));
+  final iOS = new IOSNotificationDetails();
+  final platform = new NotificationDetails(android: android, iOS: iOS);
+  await _flutterLocalNotificationsPlugin.show(0, title, body, platform);
 }
 
 Future<String> getDeviceToken() async {
-	try {
-		return await _firebaseMessaging.getToken();
-	} catch (e) {
-		print('Error while getting device token');
-		print(e);
-		return "nope";
-	}
+  try {
+    return await _firebaseMessaging.getToken();
+  } catch (e) {
+    print('Error while getting device token');
+    print(e);
+    return "nope";
+  }
 }
