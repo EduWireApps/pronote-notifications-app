@@ -128,21 +128,39 @@ class _LoginPageState extends State<LoginPage> {
             PopupMenuButton<String>(
               onSelected: (String value) {
                 if (value == 'Problèmes de connexion') {
-                  showInfoDialog(context, title: "Aide à la connexion", content: "Si vous ne parvenez pas à vous connecter, n'hésitez surtout pas à nous envoyer un mail à androz2091@gmail.com. Nous répondons en quelques heures.", actions: [
-                    new ElevatedButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent)),
-                      child: new Text("Envoyer un mail"),
-                      onPressed: () {
-                        launchURL("mailto:androz2091@gmail.com?subject=Problème de connexion à Notifications pour Pronote&body=Bonjour, je rencontre des difficultés pour me connecter à l'application.\n\nMéthode d'authentification:\n" + (_useGeolocation ? 'Géolocalisation (' + (_establishmentsLoaded ? _establishments.length.toString() + ' établissements chargés)' : 'aucun établissement chargé)') : 'URL personnalisée (' + (_pronoteURL ?? 'aucune URL') + ')') + "\n\nSerait-il possible de m'aider ?\n\nCordialement,\nYour Name Here");
-                      }
-                    )
-                  ]);
+                  showInfoDialog(context,
+                      title: "Aide à la connexion",
+                      content:
+                          "Si vous ne parvenez pas à vous connecter, n'hésitez surtout pas à nous envoyer un mail à androz2091@gmail.com. Nous répondons en quelques heures.",
+                      actions: [
+                        new ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.blueAccent)),
+                            child: new Text("Envoyer un mail"),
+                            onPressed: () {
+                              launchURL("mailto:androz2091@gmail.com?subject=Problème de connexion à Notifications pour Pronote&body=Bonjour, je rencontre des difficultés pour me connecter à l'application.\n\nMéthode d'authentification:\n" +
+                                  (_useGeolocation
+                                      ? 'Géolocalisation (' +
+                                          (_establishmentsLoaded
+                                              ? _establishments.length
+                                                      .toString() +
+                                                  ' établissements chargés)'
+                                              : 'aucun établissement chargé)')
+                                      : 'URL personnalisée (' +
+                                          (_pronoteURL ?? 'aucune URL') +
+                                          ')') +
+                                  "\n\nSerait-il possible de m'aider ?\n\nCordialement,\nYour Name Here");
+                            })
+                      ]);
                 } else {
                   showAboutAppDialog(context);
                 }
               },
-              itemBuilder: (BuildContext context){
-                return ['Problèmes de connexion', 'À propos'].map((String choice){
+              itemBuilder: (BuildContext context) {
+                return ['Problèmes de connexion', 'À propos']
+                    .map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Text(choice),

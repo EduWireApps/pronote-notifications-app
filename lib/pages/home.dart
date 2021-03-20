@@ -39,24 +39,24 @@ class _HomePageState extends State<HomePage> {
             appBar: new AppBar(
               title: new Text('Notifications pour Pronote'),
               actions: <Widget>[
-            PopupMenuButton<String>(
-              onSelected: (String value) async {
-                if (value == 'À propos') {
-                  showAboutAppDialog(context);
-                } else {
-                  inAppReview.openStoreListing();
-                }
-              },
-              itemBuilder: (BuildContext context){
-                return ['Laisser un avis', 'À propos'].map((String choice){
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
-            )
-          ],
+                PopupMenuButton<String>(
+                  onSelected: (String value) async {
+                    if (value == 'À propos') {
+                      showAboutAppDialog(context);
+                    } else {
+                      inAppReview.openStoreListing();
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return ['Laisser un avis', 'À propos'].map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                )
+              ],
             ),
             body: SettingsList(
               sections: [
