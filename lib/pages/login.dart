@@ -224,32 +224,21 @@ class _LoginPageState extends State<LoginPage> {
   Future<Position> _determinePosition() async {
       bool serviceEnabled;
       LocationPermission permission;
-
-      // Test if location services are enabled.
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        // Location services are not enabled don't continue
-        // accessing the position and request users of the 
-        // App to enable the location services.
         return Future.error('Location services are disabled.');
       }
-
       permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
           permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.deniedForever) {
-          // Permissions are denied forever, handle appropriately. 
-          return Future.error(
-            'Location permissions are permanently denied, we cannot request permissions.');
+          return Future.error('Location permissions are permanently denied, we cannot request permissions.');
         } 
 
         if (permission == LocationPermission.denied) {
           return Future.error('Location permissions are denied');
         }
       }
-
-      // When we reach here, permissions are granted and we can
-      // continue accessing the position of the device.
       return await Geolocator.getCurrentPosition();
   }
 
@@ -294,14 +283,14 @@ class _LoginPageState extends State<LoginPage> {
           Icons.school,
           color: Colors.grey,
         )),
-        validator: (value) => value.isEmpty ? 'Le mot de passe ne peut pas être vide' : null,
+        validator: (value) => value.isEmpty ? 'Veuillez sélectionner un établissement' : null,
         onSaved: (value) => _password = value.trim(),
         onTap: () {
-          _determinePosition().then((value) async {
-            setState(() {
+          setState(() {
               _geolocationErrorMessage = null;
-              _pronoteURLInfoText = 'Chargement des étab. à proximité...';            
-            });
+              _pronoteURLInfoText = 'Chargement des étab. à proximité...';           
+          });
+          _determinePosition().then((value) async {
             final establishments = await widget.api.getEstablishments(value.latitude, value.longitude);
             setState(() {
               _establishments = establishments;
@@ -310,7 +299,8 @@ class _LoginPageState extends State<LoginPage> {
           }, onError: (e) {
             print(e);
             setState(() {
-              _geolocationErrorMessage = 'La géolocalisation est nécessaire pour déterminer les établissements prêts de chez vous ! Vous pouvez aussi entrer l\'URL Pronote manuellement.';       
+              _pronoteURLInfoText = 'Accès à la géolocalisation impossible !';
+              _geolocationErrorMessage = 'La géolocalisation est nécessaire pour déterminer les établissements prêts de chez vous ! Vous pouvez aussi entrer l\'URL Pronote manuellement.';
             });
           });
         },
