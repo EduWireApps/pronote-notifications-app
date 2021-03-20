@@ -70,6 +70,7 @@ class API implements BaseAPI {
       Uri.https("pnotifications.atlanta-bot.fr", "register"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'App-Version': '1.0.1'
       },
       body: jsonEncode(<String, String>{
         'pronote_username': username,
@@ -105,7 +106,8 @@ class API implements BaseAPI {
         Uri.https("pnotifications.atlanta-bot.fr", "login"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token
+          'Authorization': token,
+          'App-Version': '1.0.1'
         });
     final jsonData = json.decode(response.body);
     if (!jsonData['success']) {
@@ -129,7 +131,8 @@ class API implements BaseAPI {
       Uri.https("pnotifications.atlanta-bot.fr", "settings"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': token
+        'Authorization': token,
+        'App-Version': '1.0.1'
       },
       body: jsonEncode({
         'notifications_homeworks': notificationsHomeworks.toString(),
@@ -145,7 +148,8 @@ class API implements BaseAPI {
     await http.post(Uri.https("pnotifications.atlanta-bot.fr", "logout"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token
+          'Authorization': token,
+          'App-Version': '1.0.1'
         });
     sharedPreferences.setBool('logged', false);
     sharedPreferences.remove('jwt');
@@ -158,7 +162,8 @@ class API implements BaseAPI {
         Uri.https("pnotifications.atlanta-bot.fr", "notifications"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token
+          'Authorization': token,
+          'App-Version': '1.0.1'
         });
     final jsonData = json.decode(response.body);
     if (!jsonData['success']) {
@@ -178,10 +183,12 @@ class API implements BaseAPI {
   }
 
   Future<List<dynamic>> getEstablishments(latitude, longitude) async {
-    final response = await http.get(Uri.https(
-        'pnotifications.atlanta-bot.fr',
-        'establishments',
-        {'latitude': latitude.toString(), 'longitude': longitude.toString()}));
+    final response = await http.get(
+        Uri.https('pnotifications.atlanta-bot.fr', 'establishments', {
+          'latitude': latitude.toString(),
+          'longitude': longitude.toString()
+        }),
+        headers: {'App-Version': '1.0.1'});
     final jsonData = json.decode(response.body);
     if (!jsonData['success']) {
       throw (jsonData['message']);
