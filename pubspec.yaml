@@ -22,6 +22,7 @@ dependencies:
   settings_ui: ^0.4.0
   flutter_launcher_icons: ^0.9.0
   geolocator: ^7.0.1
+  url_launcher: ^6.0.2
 
 dependency_overrides:
   plugin_platform_interface: ^2.0.0

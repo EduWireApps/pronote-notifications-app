@@ -123,6 +123,25 @@ class _LoginPageState extends State<LoginPage> {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Notifications pour Pronote'),
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: (String value) {
+                if (value == 'Problèmes de connexion') {
+
+                } else {
+                  showAboutAppDialog(context);
+                }
+              },
+              itemBuilder: (BuildContext context){
+                return ['Problèmes de connexion', 'À propos'].map((String choice){
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            )
+          ],
         ),
         body: Stack(
           children: <Widget>[_showForm()],

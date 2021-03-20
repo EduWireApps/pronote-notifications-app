@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
     return new MaterialApp(
-        title: 'Notifications pour Pronote ',
+        title: 'Notifications pour Pronote',
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
           primarySwatch: colorCustom,
