@@ -183,20 +183,29 @@ class API implements BaseAPI {
   }
 
   Future<List<dynamic>> getEstablishments(latitude, longitude) async {
-    final response = await http.get(
-        Uri.https('pnotifications.atlanta-bot.fr', 'establishments', {
-          'latitude': latitude.toString(),
-          'longitude': longitude.toString()
-        }),
-        headers: {'App-Version': '1.0.1'});
-    final jsonData = json.decode(response.body);
+    var jsonData;
+    try {
+      final response = await http.get(
+          Uri.https('pnotifications.atlanta-bot.fr', 'establishments', {
+            'latitude': latitude.toString(),
+            'longitude': longitude.toString()
+          }),
+          headers: {'App-Version': '1.0.1'});
+        jsonData = json.decode(response.body);
+    } catch (e) {
+      throw 'Impossible de se connecter au serveur';
+    }
     if (!jsonData['success']) {
       throw (jsonData['message']);
     } else {
-      return jsonData['establishments']
-          .map((establishmentData) => EstablishmentData(
-              establishmentData['nomEtab'], establishmentData['url']))
-          .toList();
+      if (jsonData['establishments'].length == 0) {
+        throw 'Aucun établissement trouvé...';
+      } else {
+          return jsonData['establishments']
+                      .map((establishmentData) => EstablishmentData(
+                establishmentData['nomEtab'], establishmentData['url']))
+            .toList();
+      }
     }
   }
 }

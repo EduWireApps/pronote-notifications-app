@@ -406,12 +406,19 @@ class _LoginPageState extends State<LoginPage> {
                     _pronoteURLInfoText = 'Chargement des étab. à proximité...';
                   });
                   _determinePosition().then((value) async {
-                    final establishments = await widget.api
-                        .getEstablishments(value.latitude, value.longitude);
-                    setState(() {
-                      _establishments = establishments;
-                      _establishmentsLoaded = true;
-                    });
+                    widget.api
+                        .getEstablishments(value.latitude, value.longitude)
+                        .then((establishments) {
+                          setState(() {
+                            _establishments = establishments;
+                            _establishmentsLoaded = true;
+                          });
+                        })
+                        .catchError((e) {
+                          setState(() {
+                            _pronoteURLInfoText = e.toString();
+                          });
+                        });
                   }, onError: (e) {
                     print(e);
                     setState(() {
