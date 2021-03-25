@@ -149,13 +149,4 @@ class _HomePageState extends State<HomePage> {
       print(e);
     }
   }
-
-  Widget showTodoList() {
-    return Center(
-        child: Text(
-      'Welcome. Your name is ${widget.userData.fullName}',
-      textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 30.0),
-    ));
-  }
 }
