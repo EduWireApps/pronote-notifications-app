@@ -1,6 +1,6 @@
 # [🔔 Notifications pour Pronote](https://play.google.com/store/apps/details?id=com.androz2091.pronote_notifications&gl=FR)
 
-Notifications pour Pronote est une application mobile qui étend les fonctionnalités de l'application [Pronote](https://play.google.com/store/apps/details?id=com.IndexEducation.Pronote) en envoyant des notifications lors de l'ajout d'un devoir ou d'une note.
+Notifications pour Pronote est une application mobile qui étend les fonctionnalités de l'application [Pronote](https:/https://play.google.com/store/apps/details?id=com.IndexEducation.Pronote) en envoyant des notifications lors de l'ajout d'un devoir ou d'une note.
 
 ## Fonctionnalités
 
@@ -16,7 +16,7 @@ Notifications pour Pronote est une application mobile qui étend les fonctionnal
 
 ## Fonctionnement
 
-Pronote ne disposant pas d'API, le seul moyen de détecter des ajouts de devoirs/notes/... est de se connecter à un interval de temps régulier et de comparer le résultat avec le précédent, ce qui est effectué par [l'API de l'application](https://github.com/pronote-notifications/pronote-notifications-api). Pour cela, l'API doit disposer au préalable des identifiants des utilisateurs et les mots de passes sont donc stockés par l'API pour se connecter automatiquement. Un bouton pour supprimer les données est prévu mais n'est pas encore disponible. Si vous souhaitez que vos données soient supprimés, vous pouvez m'envoyer un mail (`androz2091@gmail.com`).
+Pronote ne disposant pas d'API, le seul moyen de détecter des ajouts de devoirs/notes/... est de se connecter à un interval de temps régulier et de comparer le résultat avec le précédent, ce qui est effectué par [l'API de l'application](https://github.com/pronote-notifications/pronote-notifications-api). Pour cela, l'API doit disposer au préalable des identifiants des utilisateurs et les mots de passes sont donc stockés par l'API pour se connecter automatiquement. Un bouton pour supprimer les données est prévu mais n'est pas encore disponible. Si vous souhaitez que vos données soient supprimées, vous pouvez m'envoyer un mail (`androz2091@gmail.com`).
 
 Le code est entièrement open source :
 
