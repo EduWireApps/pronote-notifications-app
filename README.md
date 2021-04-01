@@ -1,6 +1,6 @@
 # [🔔 Notifications pour Pronote](https://play.google.com/store/apps/details?id=com.androz2091.pronote_notifications&gl=FR)
 
-Notifications pour Pronote est une application mobile qui étend les fonctionnalités de l'application [Pronote](https:/https://play.google.com/store/apps/details?id=com.IndexEducation.Pronote) en envoyant des notifications lors de l'ajout d'un devoir ou d'une note.
+Notifications pour Pronote est une application mobile qui étend les fonctionnalités de l'application [Pronote](https://play.google.com/store/apps/details?id=com.IndexEducation.Pronote) en envoyant des notifications lors de l'ajout d'un devoir ou d'une note.
 
 ## Fonctionnalités
 
