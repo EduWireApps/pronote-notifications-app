@@ -28,8 +28,8 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "MainNavigator");
+  final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey(debugLabel: "MainNavigator");
 
   @override
   void initState() {

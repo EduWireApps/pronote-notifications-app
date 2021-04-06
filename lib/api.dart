@@ -39,7 +39,6 @@ class EstablishmentData {
   EstablishmentData(this.name, this.url);
 }
 
-
 // Get the application information, including the platform and the version
 PackageInfo packageInfo;
 Future<String> getApplicationVersion() async {
@@ -53,7 +52,6 @@ const API_URL = 'pnotifications.atlanta-bot.fr';
 
 // Implements all the API requests
 class API {
-
   static Future<bool> isLogged() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final logged = sharedPreferences.getBool('logged') ?? false;
@@ -99,13 +97,12 @@ class API {
   static Future<UserData> login() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('jwt');
-    final response = await http.get(
-        Uri.https(API_URL, "login"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token,
-          'App-Version': await getApplicationVersion()
-        });
+    final response =
+        await http.get(Uri.https(API_URL, "login"), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': token,
+      'App-Version': await getApplicationVersion()
+    });
     final jsonData = json.decode(response.body);
     if (!jsonData['success']) {
       throw (jsonData['message']);
@@ -142,12 +139,11 @@ class API {
   static Future<void> logout() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('jwt');
-    await http.post(Uri.https(API_URL, "logout"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token,
-          'App-Version': await getApplicationVersion()
-        });
+    await http.post(Uri.https(API_URL, "logout"), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': token,
+      'App-Version': await getApplicationVersion()
+    });
     sharedPreferences.setBool('logged', false);
     sharedPreferences.remove('jwt');
   }
@@ -155,13 +151,12 @@ class API {
   static Future<List<dynamic>> getUserNotifications() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('jwt');
-    final response = await http.get(
-        Uri.https(API_URL, "notifications"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token,
-          'App-Version': await getApplicationVersion()
-        });
+    final response = await http
+        .get(Uri.https(API_URL, "notifications"), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': token,
+      'App-Version': await getApplicationVersion()
+    });
     final jsonData = json.decode(response.body);
     if (!jsonData['success']) {
       throw (jsonData['message']);
@@ -188,7 +183,7 @@ class API {
             'longitude': longitude.toString()
           }),
           headers: {'App-Version': await getApplicationVersion()});
-        jsonData = json.decode(response.body);
+      jsonData = json.decode(response.body);
     } catch (e) {
       throw 'Impossible de se connecter au serveur';
     }
@@ -198,8 +193,8 @@ class API {
       if (jsonData['establishments'].length == 0) {
         throw 'Aucun établissement trouvé...';
       } else {
-          return jsonData['establishments']
-                      .map((establishmentData) => EstablishmentData(
+        return jsonData['establishments']
+            .map((establishmentData) => EstablishmentData(
                 establishmentData['nomEtab'], establishmentData['url']))
             .toList();
       }

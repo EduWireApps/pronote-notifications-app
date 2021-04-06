@@ -12,7 +12,7 @@ enum AuthStatus {
 }
 
 class RootPage extends StatefulWidget {
-  RootPage({ this.navigatorKey});
+  RootPage({this.navigatorKey});
 
   final GlobalKey<NavigatorState> navigatorKey;
 

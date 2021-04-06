@@ -31,7 +31,9 @@ void initFirebase(GlobalKey<NavigatorState> navigatorKey) {
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     print("notification clicked by the user");
-    if (message.data['type'] != null) navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => NotificationsPage()));
+    if (message.data['type'] != null)
+      navigatorKey.currentState
+          .push(MaterialPageRoute(builder: (context) => NotificationsPage()));
   });
 }
 

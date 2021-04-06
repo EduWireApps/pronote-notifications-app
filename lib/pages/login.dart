@@ -72,8 +72,7 @@ class _LoginPageState extends State<LoginPage> {
     });
     if (validateAndSave()) {
       try {
-        final userData =
-            await API.register(_username, _password, _pronoteURL);
+        final userData = await API.register(_username, _password, _pronoteURL);
         print('Signed in: ${userData.fullName}');
         setState(() {
           _isLoading = false;
@@ -188,7 +187,12 @@ class _LoginPageState extends State<LoginPage> {
               showPasswordInput(),
               if (_useGeolocation) showPronoteEstablishmentsDropdown(),
               if (!_useGeolocation) showPronoteURL(),
-              if (!_useGeolocation) Container(child: Text('(exemple: https://0314700h.index-education.net)', style: TextStyle(color: Color.fromRGBO(0, 0, 0, .6))), margin: const EdgeInsets.only(top: 10)),
+              if (!_useGeolocation)
+                Container(
+                    child: Text(
+                        '(exemple: https://0314700h.index-education.net)',
+                        style: TextStyle(color: Color.fromRGBO(0, 0, 0, .6))),
+                    margin: const EdgeInsets.only(top: 10)),
               showSwitchMethod(),
               showLoginButton(),
             ],
@@ -405,23 +409,22 @@ class _LoginPageState extends State<LoginPage> {
                     _pronoteURLInfoText = 'Chargement des étab. à proximité...';
                   });
                   _determinePosition().then((value) async {
-                    API.getEstablishments(value.latitude, value.longitude)
+                    API
+                        .getEstablishments(value.latitude, value.longitude)
                         .then((establishments) {
-                          setState(() {
-                            _establishments = establishments;
-                            _establishmentsLoaded = true;
-                          });
-                        })
-                        .catchError((e) {
-                          setState(() {
-                            _pronoteURLInfoText = e.toString();
-                          });
-                        });
+                      setState(() {
+                        _establishments = establishments;
+                        _establishmentsLoaded = true;
+                      });
+                    }).catchError((e) {
+                      setState(() {
+                        _pronoteURLInfoText = e.toString();
+                      });
+                    });
                   }, onError: (e) {
                     print(e);
                     setState(() {
-                      _pronoteURLInfoText =
-                          'Sélectionnez votre établissement';
+                      _pronoteURLInfoText = 'Sélectionnez votre établissement';
                       _geolocationErrorMessage =
                           'Pour faciliter la connexion, l\'application peut trouver pour vous tous les établissements à proximité (géolocalisation requise). Sinon, vous pouvez entrer manuellement votre URL Pronote.';
                     });
