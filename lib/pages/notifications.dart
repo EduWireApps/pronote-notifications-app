@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:pronote_notifications/api.dart';
 import 'package:pronote_notifications/widgets/dialogs.dart';
 
-class NotificationPage extends StatefulWidget {
-  NotificationPage({this.api});
-
-  final BaseAPI api;
+class NotificationsPage extends StatefulWidget {
+  NotificationsPage();
 
   @override
   State<StatefulWidget> createState() {
-    return _NotificationPageState();
+    return _NotificationsPageState();
   }
 }
 
-class _NotificationPageState extends State<NotificationPage> {
+class _NotificationsPageState extends State<NotificationsPage> {
   List<dynamic> _notifications = [];
   bool _fetched = false;
 
@@ -24,7 +22,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   void refreshNotifications() async {
-    widget.api.getUserNotifications().then((result) {
+    API.getUserNotifications().then((result) {
       setState(() {
         _fetched = true;
         _notifications = result;

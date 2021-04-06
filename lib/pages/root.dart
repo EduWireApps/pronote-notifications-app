@@ -12,12 +12,12 @@ enum AuthStatus {
 }
 
 class RootPage extends StatefulWidget {
-  RootPage({this.api});
+  RootPage({ this.navigatorKey});
 
-  final BaseAPI api;
+  final GlobalKey<NavigatorState> navigatorKey;
 
   @override
-  State<StatefulWidget> createState() => new _RootPageState();
+  State<RootPage> createState() => new _RootPageState();
 }
 
 class _RootPageState extends State<RootPage> {
@@ -27,16 +27,16 @@ class _RootPageState extends State<RootPage> {
   @override
   void initState() {
     super.initState();
-    initFirebase();
+    initFirebase(widget.navigatorKey);
 
-    widget.api.isLogged().then((isLogged) {
+    API.isLogged().then((isLogged) {
       if (!isLogged) {
         setState(() {
           authStatus = AuthStatus.NOT_LOGGED_IN;
         });
       } else {
         try {
-          widget.api.login().then((userData) {
+          API.login().then((userData) {
             setState(() {
               _userData = userData;
               authStatus = AuthStatus.LOGGED_IN;
@@ -104,7 +104,6 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.NOT_LOGGED_IN:
         return new LoginPage(
-          api: widget.api,
           loginCallback: loginCallback,
         );
         break;
@@ -112,7 +111,6 @@ class _RootPageState extends State<RootPage> {
         if (_userData != null) {
           return new HomePage(
             userData: _userData,
-            api: widget.api,
             logoutCallback: logoutCallback,
           );
         } else

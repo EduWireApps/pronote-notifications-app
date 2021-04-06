@@ -6,9 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:pronote_notifications/url.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({this.api, this.loginCallback});
+  LoginPage({this.loginCallback});
 
-  final BaseAPI api;
   final Function loginCallback;
 
   @override
@@ -74,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
     if (validateAndSave()) {
       try {
         final userData =
-            await widget.api.register(_username, _password, _pronoteURL);
+            await API.register(_username, _password, _pronoteURL);
         print('Signed in: ${userData.fullName}');
         setState(() {
           _isLoading = false;
@@ -406,8 +405,7 @@ class _LoginPageState extends State<LoginPage> {
                     _pronoteURLInfoText = 'Chargement des étab. à proximité...';
                   });
                   _determinePosition().then((value) async {
-                    widget.api
-                        .getEstablishments(value.latitude, value.longitude)
+                    API.getEstablishments(value.latitude, value.longitude)
                         .then((establishments) {
                           setState(() {
                             _establishments = establishments;

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pronote_notifications/firebase.dart';
+import 'package:package_info/package_info.dart';
+import 'dart:io' show Platform;
 
 class UserData {
   // informations
@@ -37,40 +39,35 @@ class EstablishmentData {
   EstablishmentData(this.name, this.url);
 }
 
-abstract class BaseAPI {
-  // to get login status
-  Future<bool> isLogged();
-  // to register at the beginning
-  Future<UserData> register(
-      String username, String password, String pronoteURL);
-  // to login and get informations about the current user
-  Future<UserData> login();
-  // to update settings
-  Future<void> updateSettings(
-      bool notificationsHomeworks, bool notificationsMarks);
-  // to logout
-  Future<void> logout();
-  // to get notifications
-  Future<List<dynamic>> getUserNotifications();
-  // to get establishments nxt door
-  Future<List<dynamic>> getEstablishments(double latitude, double longitude);
+
+// Get the application information, including the platform and the version
+PackageInfo packageInfo;
+Future<String> getApplicationVersion() async {
+  if (packageInfo == null) {
+    packageInfo = await PackageInfo.fromPlatform();
+  }
+  return (Platform.isAndroid ? 'android-' : 'ios-') + packageInfo.version;
 }
 
-class API implements BaseAPI {
-  Future<bool> isLogged() async {
+const API_URL = 'pnotifications.atlanta-bot.fr';
+
+// Implements all the API requests
+class API {
+
+  static Future<bool> isLogged() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final logged = sharedPreferences.getBool('logged') ?? false;
     return logged;
   }
 
-  Future<UserData> register(
+  static Future<UserData> register(
       String username, String password, String pronoteURL) async {
     final fcmToken = await getDeviceToken();
     final response = await http.post(
-      Uri.https("pnotifications.atlanta-bot.fr", "register"),
+      Uri.https(API_URL, "register"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'App-Version': '1.0.1'
+        'App-Version': await getApplicationVersion()
       },
       body: jsonEncode(<String, String>{
         'pronote_username': username,
@@ -99,15 +96,15 @@ class API implements BaseAPI {
     }
   }
 
-  Future<UserData> login() async {
+  static Future<UserData> login() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('jwt');
     final response = await http.get(
-        Uri.https("pnotifications.atlanta-bot.fr", "login"),
+        Uri.https(API_URL, "login"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': token,
-          'App-Version': '1.0.1'
+          'App-Version': await getApplicationVersion()
         });
     final jsonData = json.decode(response.body);
     if (!jsonData['success']) {
@@ -123,16 +120,16 @@ class API implements BaseAPI {
     }
   }
 
-  Future<void> updateSettings(
+  static Future<void> updateSettings(
       bool notificationsHomeworks, bool notificationsMarks) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('jwt');
     await http.post(
-      Uri.https("pnotifications.atlanta-bot.fr", "settings"),
+      Uri.https(API_URL, "settings"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': token,
-        'App-Version': '1.0.1'
+        'App-Version': await getApplicationVersion()
       },
       body: jsonEncode({
         'notifications_homeworks': notificationsHomeworks.toString(),
@@ -142,28 +139,28 @@ class API implements BaseAPI {
     return;
   }
 
-  Future<void> logout() async {
+  static Future<void> logout() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('jwt');
-    await http.post(Uri.https("pnotifications.atlanta-bot.fr", "logout"),
+    await http.post(Uri.https(API_URL, "logout"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': token,
-          'App-Version': '1.0.1'
+          'App-Version': await getApplicationVersion()
         });
     sharedPreferences.setBool('logged', false);
     sharedPreferences.remove('jwt');
   }
 
-  Future<List<dynamic>> getUserNotifications() async {
+  static Future<List<dynamic>> getUserNotifications() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('jwt');
     final response = await http.get(
-        Uri.https("pnotifications.atlanta-bot.fr", "notifications"),
+        Uri.https(API_URL, "notifications"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': token,
-          'App-Version': '1.0.1'
+          'App-Version': await getApplicationVersion()
         });
     final jsonData = json.decode(response.body);
     if (!jsonData['success']) {
@@ -182,7 +179,7 @@ class API implements BaseAPI {
     }
   }
 
-  Future<List<dynamic>> getEstablishments(latitude, longitude) async {
+  static Future<List<dynamic>> getEstablishments(latitude, longitude) async {
     var jsonData;
     try {
       final response = await http.get(
@@ -190,7 +187,7 @@ class API implements BaseAPI {
             'latitude': latitude.toString(),
             'longitude': longitude.toString()
           }),
-          headers: {'App-Version': '1.0.1'});
+          headers: {'App-Version': await getApplicationVersion()});
         jsonData = json.decode(response.body);
     } catch (e) {
       throw 'Impossible de se connecter au serveur';

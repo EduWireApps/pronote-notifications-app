@@ -8,10 +8,9 @@ import 'package:in_app_review/in_app_review.dart';
 final InAppReview inAppReview = InAppReview.instance;
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.api, this.userData, this.logoutCallback})
+  HomePage({Key key, this.userData, this.logoutCallback})
       : super(key: key);
 
-  final BaseAPI api;
   final VoidCallback logoutCallback;
   final UserData userData;
 
@@ -58,6 +57,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             body: SettingsList(
+              contentPadding: EdgeInsets.only(top: 20),
               sections: [
                 SettingsSection(
                   title: 'Vos informations',
@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                           notificationsHomeworks = value;
                         });
-                        await widget.api.updateSettings(
+                        await API.updateSettings(
                             notificationsHomeworks, notificationsMarks);
                       },
                     ),
@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                           setState(() {
                             notificationsMarks = value;
                           });
-                          await widget.api.updateSettings(
+                          await API.updateSettings(
                               notificationsHomeworks, notificationsMarks);
                         },
                         enabled: true),
@@ -102,12 +102,12 @@ class _HomePageState extends State<HomePage> {
                       title: 'Historique des notifications',
                       leading: Icon(Icons.history),
                       enabled: true,
-                      onTap: () {
+                      onPressed: (context) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  NotificationPage(api: widget.api)),
+                                  NotificationsPage()),
                         );
                       },
                     ),
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                                   CircularProgressIndicator(strokeWidth: 2.0),
                             )
                           : Icon(Icons.exit_to_app),
-                      onTap: () {
+                      onPressed: (context) {
                         setState(() {
                           _loggingOut = true;
                         });
@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
 
   logout() async {
     try {
-      await widget.api.logout();
+      await API.logout();
       widget.logoutCallback();
       _loggingOut = false;
     } catch (e) {

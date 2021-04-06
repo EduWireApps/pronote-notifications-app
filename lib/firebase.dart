@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pronote_notifications/pages/notifications.dart';
 
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -13,7 +15,7 @@ final initializationSettings = InitializationSettings(
 
 bool _initialized = false;
 
-void initFirebase() {
+void initFirebase(GlobalKey<NavigatorState> navigatorKey) {
   if (_initialized) {
     return;
   }
@@ -26,6 +28,10 @@ void initFirebase() {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("message received from Firebase Messaging");
     if (message.data['type'] != null) showNotification(message);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print("notification clicked by the user");
+    if (message.data['type'] != null) navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => NotificationsPage()));
   });
 }
 

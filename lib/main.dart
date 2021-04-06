@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:pronote_notifications/api.dart';
 import 'package:pronote_notifications/pages/root.dart';
 
 void main() {
-  runApp(new MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(new MainApp());
 }
 
 Map<int, Color> color = {
@@ -22,12 +22,15 @@ Map<int, Color> color = {
 
 MaterialColor colorCustom = MaterialColor(0xFF29826c, color);
 
-class MyApp extends StatefulWidget {
+class MainApp extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  _MainAppState createState() => _MainAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MainAppState extends State<MainApp> {
+
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "MainNavigator");
+
   @override
   void initState() {
     super.initState();
@@ -39,11 +42,12 @@ class _MyAppState extends State<MyApp> {
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
     return new MaterialApp(
+        navigatorKey: navigatorKey,
         title: 'Notifications pour Pronote',
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
           primarySwatch: colorCustom,
         ),
-        home: new RootPage(api: new API()));
+        home: new RootPage(navigatorKey: navigatorKey));
   }
 }

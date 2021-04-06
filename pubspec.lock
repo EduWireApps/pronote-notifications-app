@@ -282,6 +282,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  package_info:
+    dependency: "direct main"
+    description:
+      name: package_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   path:
     dependency: transitive
     description:
@@ -348,10 +355,12 @@ packages:
   settings_ui:
     dependency: "direct main"
     description:
-      name: settings_ui
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0"
+      path: "."
+      ref: db021b3ddcf5c1cd40719be640579c6808962c48
+      resolved-ref: db021b3ddcf5c1cd40719be640579c6808962c48
+      url: "git://github.com/yako-dev/flutter-settings-ui.git"
+    source: git
+    version: "1.0.0-nullsafety.1"
   shared_preferences:
     dependency: "direct main"
     description:
