@@ -21,8 +21,8 @@ dependencies:
   image_downloader: ^0.30.0
   settings_ui:
     git:
-      url: git://github.com/yako-dev/flutter-settings-ui.git
-      ref: db021b3ddcf5c1cd40719be640579c6808962c48
+      url: https://github.com/ynotesapp/flutter-settings-ui.git
+      ref: 86b59ff
   flutter_launcher_icons: ^0.9.0
   geolocator: ^7.0.1
   url_launcher: ^6.0.3

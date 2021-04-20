@@ -356,11 +356,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: db021b3ddcf5c1cd40719be640579c6808962c48
-      resolved-ref: db021b3ddcf5c1cd40719be640579c6808962c48
-      url: "git://github.com/yako-dev/flutter-settings-ui.git"
+      ref: "86b59ff"
+      resolved-ref: "86b59ffb8b06af0421d094a893702c5bcec388e0"
+      url: "https://github.com/ynotesapp/flutter-settings-ui.git"
     source: git
-    version: "1.0.0-nullsafety.1"
+    version: "1.0.0-nullsafety.2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -414,7 +414,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.0"
   stack_trace:
     dependency: transitive
     description:

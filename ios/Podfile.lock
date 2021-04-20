@@ -7,10 +7,10 @@ PODS:
   - Firebase/Messaging (7.3.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 7.3.0)
-  - firebase_core (1.0.1):
+  - firebase_core (1.0.3):
     - Firebase/CoreOnly (= 7.3.0)
     - Flutter
-  - firebase_messaging (9.0.0):
+  - firebase_messaging (9.1.1):
     - Firebase/Messaging (= 7.3.0)
     - firebase_core
     - Flutter
@@ -75,6 +75,8 @@ PODS:
     - nanopb/encode (= 2.30907.0)
   - nanopb/decode (2.30907.0)
   - nanopb/encode (2.30907.0)
+  - package_info (0.0.1):
+    - Flutter
   - PromisesObjC (1.2.12)
   - Reachability (3.2)
   - shared_preferences (0.0.1):
@@ -91,6 +93,7 @@ DEPENDENCIES:
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - image_downloader (from `.symlinks/plugins/image_downloader/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
@@ -125,6 +128,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_downloader/ios"
   in_app_review:
     :path: ".symlinks/plugins/in_app_review/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   url_launcher:
@@ -133,8 +138,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
-  firebase_core: d2e03528e2a600891f6f460b5e92932624480d1d
-  firebase_messaging: fc1811236795c2313b8339c35d31295b1cd8486f
+  firebase_core: b5d81dfd4fb2d6f700e67de34d9a633ae325c4e9
+  firebase_messaging: 7547c99f31466371f9cfcb733d5a1bf32a819872
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: 066f996579cf097bdad3d7dc9a918d6b9e129c50
   FirebaseInstallations: 7f7ed0e7e27fb51f57291e1876e2ddb1524126c1
@@ -148,6 +153,7 @@ SPEC CHECKSUMS:
   image_downloader: 73e190d6c9f286f2649554051348d9cb319cd4b3
   in_app_review: 4a97249f7a2f539a0f294c2d9196b7fe35e49541
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d

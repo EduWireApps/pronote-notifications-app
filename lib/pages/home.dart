@@ -56,15 +56,16 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: SettingsList(
-          contentPadding: EdgeInsets.only(top: 20),
           sections: [
             SettingsSection(
               title: 'Vos informations',
               tiles: [
                 SettingsTile(
+                    iosChevronEnabled: false,
                     title: widget.userData.fullName,
                     leading: Icon(Icons.account_circle)),
                 SettingsTile(
+                    iosChevronEnabled: false,
                     title:
                         "${widget.userData.establishment} (${widget.userData.studentClass})",
                     leading: Icon(Icons.school)),
@@ -100,6 +101,7 @@ class _HomePageState extends State<HomePage> {
                 SettingsTile(
                   title: 'Historique des notifications',
                   leading: Icon(Icons.history),
+                  iosChevron: Icon(Icons.chevron_right),
                   enabled: true,
                   onPressed: (context) {
                     Navigator.push(
@@ -115,6 +117,7 @@ class _HomePageState extends State<HomePage> {
               title: 'Compte',
               tiles: [
                 SettingsTile(
+                  iosChevronEnabled: false,
                   title: 'Déconnexion',
                   leading: _loggingOut
                       ? Container(
