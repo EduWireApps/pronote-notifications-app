@@ -356,8 +356,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "092fb45"
-      resolved-ref: "092fb45c464c1cf0d07ad7f10904acfa1ac13cd6"
+      ref: f9d0639
+      resolved-ref: f9d0639494f591cad9fc77783b052b56d29e9dcf
       url: "https://github.com/EduWireApps/flutter-settings-ui.git"
     source: git
     version: "1.0.0-nullsafety.2"

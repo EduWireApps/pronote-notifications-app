@@ -22,7 +22,7 @@ dependencies:
   settings_ui:
     git:
       url: https://github.com/EduWireApps/flutter-settings-ui.git
-      ref: 092fb45
+      ref: f9d0639
   flutter_launcher_icons: ^0.9.0
   geolocator: ^7.0.1
   url_launcher: ^6.0.3
