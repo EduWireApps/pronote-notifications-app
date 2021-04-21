@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: SettingsList(
+          contentPadding: EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               title: 'Vos informations',
