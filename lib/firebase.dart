@@ -24,7 +24,7 @@ void initFirebase(GlobalKey<NavigatorState> navigatorKey) {
   Firebase.initializeApp();
 
   void handleSelectNotification () async {
-    if (await LaunchApp.isAppInstalled(androidPackageName: 'com.IndexEducation.Pronote', iosUrlScheme: 'pronote://')) {
+    if (await LaunchApp.isAppInstalled(androidPackageName: 'com.IndexEducation.Pronote', iosUrlScheme: 'pronote://') != 0) {
         print('Launching Pronote...');
         LaunchApp.openApp(androidPackageName: 'com.IndexEducation.Pronote', iosUrlScheme: 'pronote://');
       } else {
