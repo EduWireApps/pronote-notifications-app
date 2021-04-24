@@ -31,6 +31,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Localisation requise pour chercher les établissements à proximité</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Localisation requise pour chercher les établissements à proximité</string>
 	<key>PermissionGroupNotification</key>
 	<string>Afficher les notifications de notes, devoirs, etc.</string>
 	<key>UILaunchStoryboardName</key>
