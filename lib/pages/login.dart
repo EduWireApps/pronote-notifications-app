@@ -246,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
       child: new TextFormField(
         readOnly: _isLoading,
         maxLines: 1,
-        keyboardType: TextInputType.name,
+        keyboardType: TextInputType.text,
         autofocus: false,
         controller: _usernameController,
         initialValue: null,
