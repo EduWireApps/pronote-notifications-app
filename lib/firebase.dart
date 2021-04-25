@@ -44,7 +44,7 @@ void initFirebase(GlobalKey<NavigatorState> navigatorKey) {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("message received from Firebase Messaging");
-    if (message.data['type'] != null) showNotification(message);
+    if (message.data['type'] != null) showNotification(message.notification.title, message.notification.body);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     print("notification clicked by the user");
@@ -52,9 +52,7 @@ void initFirebase(GlobalKey<NavigatorState> navigatorKey) {
   });
 }
 
-showNotification(RemoteMessage notificationData) async {
-  final title = notificationData.notification.title;
-  final body = notificationData.notification.body;
+showNotification(String title, String body) async {
   final android = new AndroidNotificationDetails(title, title, title,
       styleInformation: BigTextStyleInformation(''));
   final iOS = new IOSNotificationDetails();
