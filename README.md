@@ -16,9 +16,11 @@ Notifications pour Pronote est une application mobile qui étend les fonctionnal
 
 ## Screenshots
 
-<img align="left" src="./screenshots/preview/login.png" alt="Login" title="Login" hspace="10" height="300px" />
-<img align="left" src="./screenshots/preview/account.png" alt="Account" title="Account" hspace="10" height="300px" />
-<img align="left" src="./screenshots/preview/notification.png" alt="Notification" title="Notification" hspace="10" height="300px" />
+<p float="left">
+    <img src="./screenshots/preview/login.png" alt="Login" title="Login" hspace="10" height="400px" />
+    <img src="./screenshots/preview/account.png" alt="Account" title="Account" hspace="10" height="400px" />
+    <img src="./screenshots/preview/notification.png" alt="Notification" title="Notification" hspace="10" height="400px" />
+</p>
 
 ## Fonctionnement
 
