@@ -1,4 +1,7 @@
 import 'package:url_launcher/url_launcher.dart';
 
-void launchURL(_url) async =>
-    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+Future<bool> launchURL(_url) async {
+  final canLaunchURL = await canLaunch(_url);
+  if (canLaunchURL) launch(_url);
+  return canLaunchURL;
+}

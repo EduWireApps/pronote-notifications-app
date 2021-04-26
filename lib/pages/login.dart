@@ -137,8 +137,11 @@ class _LoginPageState extends State<LoginPage> {
                                     MaterialStateProperty.all<Color>(
                                         Colors.blueAccent)),
                             child: new Text("Envoyer un mail"),
-                            onPressed: () {
-                              launchURL("mailto:androz2091@gmail.com?subject=Problème de connexion à Notifications pour Pronote&body=Bonjour, je rencontre des difficultés pour me connecter à l'application.\n\nMéthode d'authentification:\n" +
+                            onPressed: () async {
+                              final Uri emailParams = Uri(
+                                scheme: 'mailto',
+                                path: 'androz2091@gmail.com',
+                                query: 'subject=Problème de connexion à Notifications pour Pronote&body=Bonjour, je rencontre des difficultés pour me connecter à l\'application.\n\nMéthode d\'authentification:\n' +
                                   (_useGeolocation
                                       ? 'Géolocalisation (' +
                                           (_establishmentsLoaded
@@ -149,7 +152,11 @@ class _LoginPageState extends State<LoginPage> {
                                       : 'URL personnalisée (' +
                                           (_pronoteURL ?? 'aucune URL') +
                                           ')') +
-                                  "\n\nSerait-il possible de m'aider ?\n\nCordialement,\nYour Name Here");
+                                  '\n\nSerait-il possible de m\'aider ?\n\nCordialement,\nYour Name Here'
+                              );
+                              final url = emailParams.toString();
+                              final launched = await launchURL(url);
+                              if (!launched) showInfoDialog(context, title: 'Erreur', content: 'Impossible d\'ouvrir l\'application mail automatiquement...');
                             })
                       ]);
                 } else {

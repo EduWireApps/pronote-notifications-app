@@ -33,8 +33,11 @@ void showAboutAppDialog(BuildContext context) {
               backgroundColor:
                   MaterialStateProperty.all<Color>(Colors.deepOrangeAccent)),
           child: new Text("Faire un don"),
-          onPressed: () {
-            launchURL('https://paypal.me/andr0z');
+          onPressed: () async {
+            final launched = await launchURL('https://paypal.me/andr0z');
+            if (!launched) {
+              showInfoDialog(context, title: 'Erreur', content: 'Impossible d\'ouvrir le lien automatiquement. Utilisez https://paypal.me/andr0z pour nous soutenir !');
+            }
           },
         )
       ]);
