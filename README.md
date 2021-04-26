@@ -16,9 +16,7 @@ Notifications pour Pronote est une application mobile qui étend les fonctionnal
 
 ## Screenshots
 
-<img src="https://github.com/EduWireApps/pronote-notifications-app/raw/master/screenshots/preview/login.jpeg" height="400px" style="border-radius: 10px" />
-<img src="https://github.com/EduWireApps/pronote-notifications-app/raw/master/screenshots/preview/account.jpeg" height="400px" style="border-radius: 10px" />
-<img src="https://github.com/EduWireApps/pronote-notifications-app/raw/master/screenshots/preview/notification.jpeg" height="400px" style="border-radius: 10px" />
+![Login](screenshots/preview/login.png "login") ![Account](screenshots/preview/account.png "account") ![Notification](screenshots/preview/notification.png "notification")
 
 ## Fonctionnement
 
