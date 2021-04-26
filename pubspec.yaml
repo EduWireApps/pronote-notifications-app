@@ -28,6 +28,7 @@ dependencies:
   in_app_review: ^2.0.1
   package_info: ^2.0.0
   external_app_launcher: ^0.0.1
+  flutter_linkify: ^5.0.2
 
 flutter_icons:
   android: "launcher_icon"

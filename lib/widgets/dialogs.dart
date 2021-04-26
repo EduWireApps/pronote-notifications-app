@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pronote_notifications/url.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 void showInfoDialog(BuildContext context,
     {String title, String content, List<Widget> actions}) {
@@ -8,7 +9,11 @@ void showInfoDialog(BuildContext context,
     builder: (BuildContext context) {
       return AlertDialog(
           title: new Text(title),
-          content: new Text(content),
+          content: Linkify(
+              onOpen: (link) => launchURL(link.url),
+              style: TextStyle(color: Colors.black),
+              linkStyle: TextStyle(color: Colors.blue),
+              text: (content)),
           actions: <Widget>[
             ...(actions ?? []),
             new ElevatedButton(
