@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "492963344632",
+    "firebase_url": "https://pronote-notifications.firebaseio.com",
+    "project_id": "pronote-notifications",
+    "storage_bucket": "pronote-notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492963344632:android:ac30e76c12a64c1024cb0d",
+        "android_client_info": {
+          "package_name": "com.androz2091.pronote_notifications"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "492963344632-l8hinth9b6ju961igsv57i8veldha5c0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZecRDBDsL_S6MtPN-S5WTwpeg-ZmPZaw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "492963344632-l8hinth9b6ju961igsv57i8veldha5c0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
