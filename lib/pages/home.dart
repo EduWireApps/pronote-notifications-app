@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                 if (value == 'À propos') {
                   showAboutAppDialog(context);
                 } else {
-                  inAppReview.openStoreListing();
+                  inAppReview.openStoreListing(appStoreId: '1564109971');
                 }
               },
               itemBuilder: (BuildContext context) {
