@@ -14,6 +14,12 @@ Notifications pour Pronote est une application mobile qui étend les fonctionnal
 * Envoi de notifications lorsque la salle d'un cours des deux prochaines semaines est modifiée
 * Ajout d'un bouton `Supprimer mes données`
 
+## Screenshots
+
+<img src="https://github.com/EduWireApps/pronote-notifications-app/raw/master/screenshots/preview/login.jpeg" height="400px" style="border-radius: 10px" />
+<img src="https://github.com/EduWireApps/pronote-notifications-app/raw/master/screenshots/preview/account.jpeg" height="400px" style="border-radius: 10px" />
+<img src="https://github.com/EduWireApps/pronote-notifications-app/raw/master/screenshots/preview/notification.jpeg" height="400px" style="border-radius: 10px" />
+
 ## Fonctionnement
 
 Pronote ne disposant pas d'API, le seul moyen de détecter des ajouts de devoirs/notes/... est de se connecter à un interval de temps régulier et de comparer le résultat avec le précédent, ce qui est effectué par [l'API de l'application](https://github.com/pronote-notifications/pronote-notifications-api). Pour cela, l'API doit disposer au préalable des identifiants des utilisateurs et les mots de passes sont donc stockés par l'API pour se connecter automatiquement. Un bouton pour supprimer les données est prévu mais n'est pas encore disponible. Si vous souhaitez que vos données soient supprimées, vous pouvez m'envoyer un mail (`androz2091@gmail.com`).
